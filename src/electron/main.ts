@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, Menu, dialog, shell, clipboard, nativeImage } from "electron";
+import { app, BrowserWindow, ipcMain, Menu, dialog, shell, clipboard, nativeImage, ClipboardItem } from "electron";
 import { fileURLToPath } from "url";
 import fs from "fs/promises";
 import path from "path";
@@ -248,7 +248,13 @@ async function saveAndCopyScreenshot(pngDataUrl: string): Promise<ErrorMessageRe
 
     await fs.writeFile(filePath, image.toPNG());
 
-    clipboard.writeImage(image);
+    const png = image.toPNG();
+
+    await clipboard.write([
+        new ClipboardItem({
+            "image/png": new Blob([ png as BlobPart ], { type: "image/png", }),
+        }),
+    ]);
 
     return {
         success: true,
