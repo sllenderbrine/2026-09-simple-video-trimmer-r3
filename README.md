@@ -12,7 +12,7 @@ An Electron.js app made for organizing and trimming a large amount of gameplay c
 
 
 
-###### Planned Features
+###### Features
 
 * 📁 Browse and preview videos on your device
 * ✂️ Quickly trim, crop, and rename videos
