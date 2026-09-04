@@ -1,0 +1,1 @@
+export const GITHUB_VERSION_TAG = "v2.0.0";

@@ -1,0 +1,48 @@
+{
+  "name": "2026-07-simple-video-trimmer-r2",
+  "version": "2.0.0",
+  "author": "Sllenderbrine",
+  "description": "A simple video editor for quickly editing and renaming a large amount of clips",
+  "keywords": [],
+  "license": "MIT",
+  "main": "dist/electron/main.js",
+  "type": "module",
+  "scripts": {
+    "start": "npm run build && electron .",
+    "build": "tsc",
+    "auto-build": "tsc --watch",
+    "package": "npm run build && electron-builder",
+    "package-dev": "npm run build && electron-builder --dir"
+  },
+  "build": {
+    "appId": "sllenderbrine.simplevideotrimmer.r2",
+    "productName": "Simple Video Trimmer",
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "resources/icons/app.ico"
+    },
+    "files": [
+      "dist/**/*",
+      "package.json",
+      "resources/**/*"
+    ],
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    }
+  },
+  "dependencies": {
+    "ffmpeg-static": "^5.3.0"
+  },
+  "devDependencies": {
+    "electron": "^44.2.0",
+    "electron-builder": "^26.15.3",
+    "typescript": "^7.0.2"
+  }
+}

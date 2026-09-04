@@ -1,0 +1,12 @@
+🪲 Known Bugs
+Cant view notifications when there are too many (add scrolling)
+WindowBar and ContextMenu buttons flicker on hover
+
+
+▢ Later Planned Features
+- ctrl + scroll to change file viewer scale
+- add settings option for lossless trim vs precise trim
+ > on lossless, snap the trim handles to each i-frame on renderer side
+- add support for other video file types
+- fullscreen mode hides window bar until mouse moves to top of screen
+- refactor so inner objects are referenced less directly by external system (ex, trimEditor shouldnt access trimEditor.canvas.video.videoEl directly)

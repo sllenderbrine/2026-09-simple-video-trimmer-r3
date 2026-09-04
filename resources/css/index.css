@@ -1,0 +1,24 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: rgb(30, 30, 30);
+}
+
+@font-face {
+    font-family: "Recursive";
+    src: url("../fonts/Recursive/Recursive-VariableFont_CASL\,CRSV\,MONO\,slnt\,wght.ttf");
+}
+
+.video-trim-app-content {
+    position: absolute;
+    left: 0px;
+    top: 34px;
+    width: 100%;
+    height: calc(100% - 34px);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+}

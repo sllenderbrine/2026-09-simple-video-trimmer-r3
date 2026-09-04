@@ -1,0 +1,106 @@
+.sttngs {
+    position: absolute;
+    z-index: 10;
+    left: 50%;
+    top: 50%;
+    width: 350px;
+    height: 250px;
+    background-color: rgb(10, 10, 10);
+    outline: 1px solid rgb(80, 80, 80);
+    transform: translate(-50%, -50%);
+    border-radius: 6px;
+    user-select: none;
+}
+
+.sttngs-backdrop {
+    position: absolute;
+    z-index: 9;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(20, 20, 20, 0.8);
+    user-select: none;
+}
+
+.sttngs-content {
+    position: absolute;
+    left: 16px;
+    top: 16px;
+    width: calc(100% - 32px);
+    height: calc(100% - 32px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    gap: 6px;
+}
+
+.sttngs-row {
+    position: relative;
+    width: 100%;
+    height: fit-content;
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    user-select: none;
+}
+
+.sttngs-label {
+    flex: 0 0 auto;
+    font-family: "Recursive";
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.8);
+    width: fit-content;
+    height: 100%;
+    align-content: center;
+    user-select: none;
+    pointer-events: none;
+}
+
+.sttngs-dropdown {
+    width: fit-content;
+    height: 100%;
+    flex: 0 0 auto;
+    background-color: rgb(255, 255, 255, 0.05);
+    border: none;
+    border: 1px solid rgb(80, 80, 80);
+    padding: 4px 8px;
+    display: flex;
+    flex-direction: row;
+    user-select: none;
+    cursor: pointer;
+    transition: background-color 0.1s ease;
+}
+
+.sttngs-dropdown:hover {
+    background-color: rgb(255, 255, 255, 0.1);
+}
+
+.sttngs-dropdown-label {
+    width: fit-content;
+    height: 100%;
+    flex: 0 0 auto;
+    font-family: "Recursive";
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.35);
+    user-select: none;
+    pointer-events: none;
+}
+
+.sttngs-dropdown-icon {
+    width: 12px;
+    height: 12px;
+    flex: 0 0 auto;
+    color: rgba(255, 255, 255, 0.35);
+    user-select: none;
+    pointer-events: none;
+    align-self: center;
+}
+
+.sttngs-dropdown-icon svg {
+    width: 100%;
+    height: 100%;
+}
