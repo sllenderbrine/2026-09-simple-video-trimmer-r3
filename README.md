@@ -8,8 +8,9 @@ Tauri app made for organizing and trimming gameplay clips.
 
 ###### Target Platforms
 
-* 💻 Windows
+* 🖥️ Windows
 * 🐧 Linux
+* ⌨️ macOS
 
 
 
