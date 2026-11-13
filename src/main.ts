@@ -23,14 +23,16 @@ import { DropdownMenuElement } from "./ts/Ui/DropdownMenu";
 //   });
 // });
 
+document.documentElement.oncontextmenu = e => e.preventDefault();
+document.body.oncontextmenu = e => e.preventDefault();
+
 let menu = DropdownMenuElement.create((menu, k) => menu.append(
-    k.decorativeButton("", "Option A".repeat(10), "Ctrl + S"),
-    k.decorativeButton("", "Option B"),
-    k.decorativeButton("", "Option C"),
+    k.decorativeButton("back.svg/0.9", "Move Up Directory", "Ctrl + Up Arrow").setEnabled(false),
+    k.decorativeButton("refresh.svg/0.8", "Refresh", "Ctrl + R"),
+    k.decorativeButton("hard-refresh.svg/0.8", "Hard Refresh", "Ctrl + Shift + R"),
     k.divider(),
-    k.decorativeButton("", "Option D"),
-    k.decorativeButton("", "Option E"),
-    k.decorativeButton("", "Option F"),
+    k.decorativeButton("save.svg/1.05", "Import/Export Data"),
+    k.decorativeButton("settings.svg/0.8", "Settings", "Ctrl + P"),
 ));
 document.body.appendChild(menu.containerEl);
 menu.containerEl.style = "position:absolute;left:40px;top:40px;";

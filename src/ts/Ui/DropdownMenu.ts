@@ -16,6 +16,7 @@ CssUtility.adoptStyle(`
         overflow-y: auto;
         scrollbar-width: none;
         box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+        user-select: none;
         --item-height: 24px;
     }
 
@@ -32,16 +33,30 @@ CssUtility.adoptStyle(`
         cursor: pointer;
         transition: background-color 0.1s ease;
         border-radius: 4px;
+        user-select: none;
+        overflow: hidden;
     }
 
     .dropdown-button:hover {
-        background-color: var(--hover-bright);
+        background-color: var(--bright1);
     }
 
     .dropdown-button-icon-container {
         width: var(--item-height);
         height: var(--item-height);
         flex: 0 0 auto;
+        user-select: none;
+        pointer-events: none;
+        background-color: var(--bright0);
+        text-align: center;
+        align-content: center;
+        padding: 0px 4px;
+        opacity: 0.5;
+    }
+    
+    .dropdown-button-icon-container svg {
+        width: 100%;
+        height: 100%;
     }
 
     .dropdown-button-label {
@@ -53,6 +68,8 @@ CssUtility.adoptStyle(`
         padding: 0px 12px;
         white-space: nowrap;
         overflow: hidden;
+        user-select: none;
+        pointer-events: none;
     }
 
     .dropdown-divider {
@@ -61,14 +78,47 @@ CssUtility.adoptStyle(`
         background-color: var(--bg2);
         flex: 0 0 auto;
         margin: 4px 0px;
+        user-select: none;
+        pointer-events: none;
     }
 
     .dropdown-keybind-label {
         opacity: 0.5;
         width: fit-content;
         flex: 0 0 auto;
+        user-select: none;
+        pointer-events: none;
     }
 `);
+
+export class DropdownButtonIconElement {
+    public containerEl: HTMLDivElement;
+    public svgEl: SVGElement | null = null;
+    private _fetchIndex = 0;
+    private _scale = 1;
+    constructor() {
+        this.containerEl = document.createElement("div");
+        this.containerEl.classList.add("dropdown-button-icon-container");
+    }
+
+    public setIcon(src: string): void {
+        let fetchId = ++this._fetchIndex;
+        fetch(src).then(res => res.text()).then(text => {
+            if(fetchId != this._fetchIndex)
+                return;
+            this.containerEl.innerHTML = text;
+            this.svgEl = this.containerEl.querySelector("svg");
+            if(this.svgEl !== null)
+                this.svgEl.style.scale = this._scale.toString();
+        });
+    }
+
+    public setScale(scale: number): void {
+        this._scale = scale;
+        if(this.svgEl !== null)
+            this.svgEl.style.scale = this._scale.toString();
+    }
+}
 
 export class DropdownButtonLabelElement {
     public containerEl: HTMLDivElement;
@@ -88,7 +138,8 @@ export class DropdownButtonLabelElement {
     }
 }
 
-export type DropdownButtonElementAppendable = DropdownButtonLabelElement;
+export type DropdownButtonElementAppendable = DropdownButtonLabelElement
+    | DropdownButtonIconElement;
 
 export class DropdownButtonElement {
     public containerEl: HTMLButtonElement;
@@ -108,6 +159,24 @@ export class DropdownButtonElement {
 
     public setTooltip(text: string): this {
         this.containerEl.title = text;
+        return this;
+    }
+
+    public setEnabled(value: boolean): this {
+        if(value) {
+            this.containerEl.style.opacity = "";
+            this.containerEl.style.backgroundColor = "";
+            this.containerEl.style.cursor = "";
+            this.containerEl.style.pointerEvents = "";
+            this.containerEl.disabled = false;
+        } else {
+            this.containerEl.style.opacity = "0.3";
+            this.containerEl.style.backgroundColor = "rgb(10, 10, 10)";
+            this.containerEl.style.cursor = "default";
+            this.containerEl.style.pointerEvents = "none";
+            this.containerEl.disabled = true;
+        }
+        console.log(value);
         return this;
     }
 }
@@ -131,6 +200,9 @@ export class DropdownMenuElement {
     constructor() {
         this.containerEl = document.createElement("div");
         this.containerEl.classList.add("dropdown-container");
+        this.containerEl.addEventListener("contextmenu", e => {
+            e.preventDefault();
+        });
     }
 
     public static create(callback: DropdownMenuCreateCallback): DropdownMenuElement {
@@ -144,7 +216,26 @@ export class DropdownMenuElement {
             this.containerEl.appendChild(el.containerEl);
             this.elements.push(el);
         }
+        this.updateBorderRadius();
         return this;
+    }
+
+    public updateBorderRadius(): void {
+        for(let i=0; i<this.elements.length; i++) {
+            const el = this.elements[i]!;
+            const prevEl = this.elements[i - 1];
+            const nextEl = this.elements[i + 1];
+            if(el instanceof DropdownButtonElement) {
+                if(prevEl != null && prevEl instanceof DropdownButtonElement) {
+                    el.containerEl.style.borderTopLeftRadius = "0px";
+                    el.containerEl.style.borderTopRightRadius = "0px";
+                }
+                if(nextEl != null && nextEl instanceof DropdownButtonElement) {
+                    el.containerEl.style.borderBottomLeftRadius = "0px";
+                    el.containerEl.style.borderBottomRightRadius = "0px";
+                }
+            }
+        }
     }
 }
 
@@ -160,16 +251,29 @@ const dropdownMenuElementCreator = {
         btn.append(keybindEl);
         return btn;
     },
-    decorativeButton: (svgArg: string, text: string, last?: string | DropdownMenuCreateCallback) => {
+    decorativeButton: (first: string, text: string, last?: string | DropdownMenuCreateCallback) => {
         let btn = new DropdownButtonElement();
+        let iconEl = new DropdownButtonIconElement();
+        btn.append(iconEl);
+        if(first !== "") {
+            let parts = first.split("/");
+            let iconName = parts[0]!;
+            let iconScale = parseFloat(parts[1] ?? "1");
+            if(!isFinite(iconScale)) iconScale = 1;
+            iconEl.setIcon("./src/icons/" + iconName);
+            iconEl.setScale(iconScale);
+        }
         btn.append(new DropdownButtonLabelElement().setText(text));
         if(typeof last === "string") {
             let keybindEl = new DropdownButtonLabelElement().setText(last);
             keybindEl.containerEl.classList.add("dropdown-keybind-label");
             btn.append(keybindEl);
         } else if(typeof last === "function") {
-            
+            let iconEl = new DropdownButtonIconElement();
+            iconEl.setIcon("./src/icons/triangle.svg");
+            iconEl.setScale(0.5);
+            btn.append(iconEl);
         }
         return btn;
-    }
+    },
 }
