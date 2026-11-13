@@ -28,11 +28,16 @@ document.body.oncontextmenu = e => e.preventDefault();
 
 let menu = DropdownMenuElement.create((menu, k) => menu.append(
     k.decorativeButton("back.svg/0.9", "Move Up Directory", "Ctrl + Up Arrow").setEnabled(false),
+    k.decorativeButton("undo.svg/0.9", "Back", "Ctrl + Left Arrow").setEnabled(false),
+    k.decorativeButton("redo.svg/0.9", "Forward", "Ctrl + Right Arrow").setEnabled(false),
+    k.divider(),
     k.decorativeButton("refresh.svg/0.8", "Refresh", "Ctrl + R"),
     k.decorativeButton("hard-refresh.svg/0.8", "Hard Refresh", "Ctrl + Shift + R"),
     k.divider(),
     k.decorativeButton("save.svg/1.05", "Import/Export Data"),
     k.decorativeButton("settings.svg/0.8", "Settings", "Ctrl + P"),
+    k.divider(),
+    k.decorativeButton("cross.svg/0.8", "Exit"),
 ));
 document.body.appendChild(menu.containerEl);
 menu.containerEl.style = "position:absolute;left:40px;top:40px;";

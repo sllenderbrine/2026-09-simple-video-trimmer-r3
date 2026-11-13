@@ -11,7 +11,7 @@ CssUtility.adoptStyle(`
         width: 300px;
         height: fit-content;
         min-height: 12px;
-        max-height: 200px;
+        max-height: 300px;
         overflow-x: hidden;
         overflow-y: auto;
         scrollbar-width: none;
