@@ -38,6 +38,4 @@ let menu = DropdownMenuElement.create((menu, k) => menu.append(
     k.decorativeButton("settings.svg/0.8", "Settings", "Ctrl + P"),
     k.divider(),
     k.decorativeButton("cross.svg/0.8", "Exit"),
-));
-document.body.appendChild(menu.containerEl);
-menu.containerEl.style = "position:absolute;left:40px;top:40px;";
+)).setPosition(40, 40).animateOpen();

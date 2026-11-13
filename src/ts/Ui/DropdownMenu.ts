@@ -2,6 +2,7 @@ import { CssUtility } from "../Utility/CssUtility";
 
 CssUtility.adoptStyle(`
     .dropdown-container {
+        position: absolute;
         display: flex;
         flex-direction: column;
         background-color: var(--bg1);
@@ -88,6 +89,10 @@ CssUtility.adoptStyle(`
         flex: 0 0 auto;
         user-select: none;
         pointer-events: none;
+    }
+
+    .dropdown-button-expand-icon {
+        background-color: transparent;
     }
 `);
 
@@ -179,6 +184,11 @@ export class DropdownButtonElement {
         console.log(value);
         return this;
     }
+
+    public onClick(callback: (e: MouseEvent) => void): this {
+        this.containerEl.addEventListener("click", callback);
+        return this;
+    }
 }
 
 export class DropdownDividerElement {
@@ -203,6 +213,7 @@ export class DropdownMenuElement {
         this.containerEl.addEventListener("contextmenu", e => {
             e.preventDefault();
         });
+        document.body.appendChild(this.containerEl);
     }
 
     public static create(callback: DropdownMenuCreateCallback): DropdownMenuElement {
@@ -237,6 +248,65 @@ export class DropdownMenuElement {
             }
         }
     }
+
+    public setPosition(x: number, y: number): this {
+        if(x + this.containerEl.offsetWidth > window.innerWidth) {
+            this.containerEl.style.right = (window.innerWidth - x) + "px";
+        } else {
+            this.containerEl.style.left = x + "px";
+        }
+        console.log(y, window.innerHeight);
+        if(y + this.containerEl.offsetHeight > window.innerHeight) {
+            this.containerEl.style.bottom = (window.innerHeight - y) + "px";
+        } else {
+            this.containerEl.style.top = y + "px";
+        }
+        return this;
+    }
+
+    public animateOpen(): this {
+        this.containerEl.animate([
+            {
+                minHeight: "0px",
+                height: "0px",
+                scale: "0.9",
+                transformOrigin: "top left",
+                opacity: "0",
+                pointerEvents: "none",
+            },
+            {
+                minHeight: "0px",
+                height: (this.containerEl.clientHeight - 8) + "px",
+                scale: "1",
+                transformOrigin: "top left",
+                opacity: "1",
+                pointerEvents: "none",
+            },
+        ], { duration: 150, easing: "ease-in-out" });
+        return this;
+    }
+
+    public animateClose(): this {
+        this.containerEl.animate([
+            {
+                minHeight: "0px",
+                height: (this.containerEl.clientHeight - 8) + "px",
+                scale: "1",
+                transformOrigin: "top left",
+                opacity: "1",
+            },
+            {
+                minHeight: "0px",
+                height: "0px",
+                scale: "0.9",
+                transformOrigin: "top left",
+                opacity: "0",
+            },
+        ], { duration: 150, easing: "ease-in-out" });
+        this.containerEl.style.opacity = "0";
+        this.containerEl.style.pointerEvents = "none";
+        return this;
+    }
 }
 
 const dropdownMenuElementCreator = {
@@ -270,6 +340,7 @@ const dropdownMenuElementCreator = {
             btn.append(keybindEl);
         } else if(typeof last === "function") {
             let iconEl = new DropdownButtonIconElement();
+            iconEl.containerEl.classList.add("dropdown-button-expand-icon");
             iconEl.setIcon("./src/icons/triangle.svg");
             iconEl.setScale(0.5);
             btn.append(iconEl);
