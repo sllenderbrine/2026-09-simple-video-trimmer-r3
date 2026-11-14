@@ -1,7 +1,7 @@
 import { CssUtility } from "../Utility/CssUtility";
 
-CssUtility.adoptStyle(`
-    .dropdown-container {
+export const DROPDOWNMENU_STYLE = CssUtility.adoptStyle(`
+    .dropdownmenu {
         position: absolute;
         display: flex;
         flex-direction: column;
@@ -21,7 +21,7 @@ CssUtility.adoptStyle(`
         --item-height: 24px;
     }
 
-    .dropdown-button {
+    .dropdownmenu-button {
         display: flex;
         flex-direction: row;
         flex: 0 0 auto;
@@ -38,11 +38,11 @@ CssUtility.adoptStyle(`
         overflow: hidden;
     }
 
-    .dropdown-button:hover {
+    .dropdownmenu-button:hover {
         background-color: var(--bright1);
     }
 
-    .dropdown-button-icon-container {
+    .dropdownmenu-prefixicon {
         width: var(--item-height);
         height: var(--item-height);
         flex: 0 0 auto;
@@ -53,14 +53,14 @@ CssUtility.adoptStyle(`
         align-content: center;
         padding: 0px 4px;
         opacity: 0.5;
-    }
-    
-    .dropdown-button-icon-container svg {
-        width: 100%;
-        height: 100%;
+
+        svg {
+            width: 100%;
+            height: 100%;
+        }
     }
 
-    .dropdown-button-label {
+    .dropdownmenu-title {
         width: 100%;
         height: var(--item-height);
         flex-shrink: 1;
@@ -73,7 +73,7 @@ CssUtility.adoptStyle(`
         pointer-events: none;
     }
 
-    .dropdown-divider {
+    .dropdownmenu-divider {
         width: 100%;
         height: 1px;
         background-color: var(--bg2);
@@ -83,189 +83,257 @@ CssUtility.adoptStyle(`
         pointer-events: none;
     }
 
-    .dropdown-keybind-label {
+    .dropdownmenu-keybind {
+        height: var(--item-height);
+        align-content: center;
+        text-align: left;
+        padding: 0px 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        user-select: none;
+        pointer-events: none;
         opacity: 0.5;
         width: fit-content;
         flex: 0 0 auto;
-        user-select: none;
-        pointer-events: none;
     }
 
-    .dropdown-button-expand-icon {
+    .dropdownmenu-expandicon {
         background-color: transparent;
     }
 `);
 
-export class DropdownButtonIconElement {
-    public containerEl: HTMLDivElement;
-    public svgEl: SVGElement | null = null;
-    private _fetchIndex = 0;
-    private _scale = 1;
+export class DropdownMenuPrefixIcon {
+    public _containerEl: HTMLDivElement;
+    public _svgEl: SVGElement | null = null;
+    public _fetchId = 0;
+    public _scale = 1;
     constructor() {
-        this.containerEl = document.createElement("div");
-        this.containerEl.classList.add("dropdown-button-icon-container");
+        this._containerEl = document.createElement("div");
+        this._containerEl.classList.add("dropdownmenu-prefixicon");
     }
 
     public setIcon(src: string): void {
-        let fetchId = ++this._fetchIndex;
-        fetch(src).then(res => res.text()).then(text => {
-            if(fetchId != this._fetchIndex)
-                return;
-            this.containerEl.innerHTML = text;
-            this.svgEl = this.containerEl.querySelector("svg");
-            if(this.svgEl !== null)
-                this.svgEl.style.scale = this._scale.toString();
-        });
+        let fetchId = ++this._fetchId;
+        if(src.endsWith(".svg")) {
+            fetch(src).then(res => res.text()).then(text => {
+                if(fetchId != this._fetchId)
+                    return;
+                this._containerEl.innerHTML = text;
+                this._svgEl = this._containerEl.querySelector("svg");
+                if(this._svgEl !== null)
+                    this._svgEl.style.scale = this._scale.toString();
+            });
+        }
     }
 
     public setScale(scale: number): void {
         this._scale = scale;
-        if(this.svgEl !== null)
-            this.svgEl.style.scale = this._scale.toString();
+        if(this._svgEl !== null)
+            this._svgEl.style.scale = this._scale.toString();
     }
 }
 
-export class DropdownButtonLabelElement {
-    public containerEl: HTMLDivElement;
+export class DropdownMenuTitle {
+    public _containerEl: HTMLDivElement;
     constructor() {
-        this.containerEl = document.createElement("div");
-        this.containerEl.classList.add("dropdown-button-label");
+        this._containerEl = document.createElement("div");
+        this._containerEl.classList.add("dropdownmenu-title");
     }
 
     public setText(text: string): this {
-        this.containerEl.textContent = text;
+        this._containerEl.textContent = text;
         return this;
     }
 
     public setTooltip(text: string): this {
-        this.containerEl.title = text;
+        this._containerEl.title = text;
         return this;
     }
 }
 
-export type DropdownButtonElementAppendable = DropdownButtonLabelElement
-    | DropdownButtonIconElement;
-
-export class DropdownButtonElement {
-    public containerEl: HTMLButtonElement;
-    public elements: DropdownButtonElementAppendable[] = [];
+export class DropdownMenuKeybind {
+    public _containerEl: HTMLDivElement;
     constructor() {
-        this.containerEl = document.createElement("button");
-        this.containerEl.classList.add("dropdown-button");
+        this._containerEl = document.createElement("div");
+        this._containerEl.classList.add("dropdownmenu-keybind");
     }
 
-    public append(...els: DropdownButtonElementAppendable[]): this {
-        for(const el of els) {
-            this.containerEl.appendChild(el.containerEl);
-            this.elements.push(el);
-        }
+    public setText(text: string): this {
+        this._containerEl.textContent = text;
         return this;
     }
 
     public setTooltip(text: string): this {
-        this.containerEl.title = text;
-        return this;
-    }
-
-    public setEnabled(value: boolean): this {
-        if(value) {
-            this.containerEl.style.opacity = "";
-            this.containerEl.style.backgroundColor = "";
-            this.containerEl.style.cursor = "";
-            this.containerEl.style.pointerEvents = "";
-            this.containerEl.disabled = false;
-        } else {
-            this.containerEl.style.opacity = "0.3";
-            this.containerEl.style.backgroundColor = "rgb(10, 10, 10)";
-            this.containerEl.style.cursor = "default";
-            this.containerEl.style.pointerEvents = "none";
-            this.containerEl.disabled = true;
-        }
-        console.log(value);
-        return this;
-    }
-
-    public onClick(callback: (e: MouseEvent) => void): this {
-        this.containerEl.addEventListener("click", callback);
+        this._containerEl.title = text;
         return this;
     }
 }
 
-export class DropdownDividerElement {
-    public containerEl: HTMLDivElement;
+export type DropdownMenuButtonChild = DropdownMenuPrefixIcon
+    | DropdownMenuTitle
+    | DropdownMenuKeybind;
+
+export class DropdownMenuButton {
+    public _containerEl: HTMLButtonElement;
+    public _children: DropdownMenuButtonChild[] = [];
     constructor() {
-        this.containerEl = document.createElement("div");
-        this.containerEl.classList.add("dropdown-divider");
+        this._containerEl = document.createElement("button");
+        this._containerEl.classList.add("dropdownmenu-button");
+    }
+
+    public addPrefixIcon(callback?: (k: DropdownMenuPrefixIcon) => void) {
+        const el = new DropdownMenuPrefixIcon();
+        callback?.(el);
+        this._containerEl.appendChild(el._containerEl);
+        this._children.push(el);
+        return el;
+    }
+
+    public addPrefixIconA(name: string, scale?: number) {
+        const k = this.addPrefixIcon();
+        k.setIcon("./src/icons/" + name);
+        if(scale !== undefined)
+            k.setScale(scale);
+        return k;
+    }
+
+    public addTitle(callback?: (k: DropdownMenuTitle) => void) {
+        const el = new DropdownMenuTitle();
+        callback?.(el);
+        this._containerEl.appendChild(el._containerEl);
+        this._children.push(el);
+        return el;
+    }
+
+    public addTitleA(text: string, tooltip?: string) {
+        const k = this.addTitle();
+        k.setText(text);
+        if(tooltip !== undefined)
+            k.setTooltip(tooltip);
+        return k;
+    }
+
+    public addKeybind(callback?: (k: DropdownMenuKeybind) => void) {
+        const el = new DropdownMenuKeybind();
+        callback?.(el);
+        this._containerEl.appendChild(el._containerEl);
+        this._children.push(el);
+        return el;
+    }
+
+    public addKeybindA(text: string, tooltip?: string) {
+        const k = this.addKeybind();
+        k.setText(text);
+        if(tooltip !== undefined)
+            k.setTooltip(tooltip);
+        return k;
+    }
+
+    public setTooltip(text: string) {
+        this._containerEl.title = text;
+    }
+
+    public enable() {
+        this._containerEl.style.opacity = "";
+        this._containerEl.style.backgroundColor = "";
+        this._containerEl.style.cursor = "";
+        this._containerEl.style.pointerEvents = "";
+        this._containerEl.disabled = false;
+    }
+
+    public disable() {
+        this._containerEl.style.opacity = "0.3";
+        this._containerEl.style.backgroundColor = "rgb(10, 10, 10)";
+        this._containerEl.style.cursor = "default";
+        this._containerEl.style.pointerEvents = "none";
+        this._containerEl.disabled = true;
     }
 }
 
-export type DropdownMenuElementAppendable = DropdownButtonElement
-    | DropdownDividerElement;
-
-export type DropdownMenuCreateCallback = (menu: DropdownMenuElement, k: typeof dropdownMenuElementCreator) => void;
-
-export class DropdownMenuElement {
-    public containerEl: HTMLDivElement;
-    public elements: DropdownMenuElementAppendable[] = [];
+export class DropdownMenuDivider {
+    public _containerEl: HTMLDivElement;
     constructor() {
-        this.containerEl = document.createElement("div");
-        this.containerEl.classList.add("dropdown-container");
-        this.containerEl.addEventListener("contextmenu", e => {
+        this._containerEl = document.createElement("div");
+        this._containerEl.classList.add("dropdownmenu-divider");
+    }
+}
+
+export type DropdownMenuChild = DropdownMenuButton
+    | DropdownMenuDivider;
+
+export class DropdownMenu {
+    public _containerEl: HTMLDivElement;
+    public _elements: DropdownMenuChild[] = [];
+    public _initCallbackActive = false;
+    constructor(callback?: (k: DropdownMenu) => void) {
+        this._containerEl = document.createElement("div");
+        this._containerEl.classList.add("dropdownmenu");
+        this._containerEl.addEventListener("contextmenu", e => {
             e.preventDefault();
         });
-        document.body.appendChild(this.containerEl);
-    }
-
-    public static create(callback: DropdownMenuCreateCallback): DropdownMenuElement {
-        let menu = new DropdownMenuElement();
-        callback(menu, dropdownMenuElementCreator);
-        return menu;
-    }
-
-    public append(...els: DropdownMenuElementAppendable[]): this {
-        for(const el of els) {
-            this.containerEl.appendChild(el.containerEl);
-            this.elements.push(el);
-        }
+        document.body.appendChild(this._containerEl);
+        this._initCallbackActive = true;
+        callback?.(this);
+        this._initCallbackActive = false;
+        this.animateOpen();
         this.updateBorderRadius();
-        return this;
+    }
+    
+    public addButton(callback?: (k: DropdownMenuButton) => void) {
+        let el = new DropdownMenuButton();
+        callback?.(el);
+        this._elements.push(el);
+        this._containerEl.appendChild(el._containerEl);
+        this.updateBorderRadius();
+        return el;
+    }
+    
+    public addDivider(callback?: (k: DropdownMenuDivider) => void) {
+        let el = new DropdownMenuDivider();
+        callback?.(el);
+        this._elements.push(el);
+        this._containerEl.appendChild(el._containerEl);
+        this.updateBorderRadius();
+        return el;
     }
 
     public updateBorderRadius(): void {
-        for(let i=0; i<this.elements.length; i++) {
-            const el = this.elements[i]!;
-            const prevEl = this.elements[i - 1];
-            const nextEl = this.elements[i + 1];
-            if(el instanceof DropdownButtonElement) {
-                if(prevEl != null && prevEl instanceof DropdownButtonElement) {
-                    el.containerEl.style.borderTopLeftRadius = "0px";
-                    el.containerEl.style.borderTopRightRadius = "0px";
+        if(this._initCallbackActive)
+            return;
+        for(let i=0; i<this._elements.length; i++) {
+            const el = this._elements[i]!;
+            const prevEl = this._elements[i - 1];
+            const nextEl = this._elements[i + 1];
+            if(el instanceof DropdownMenuButton) {
+                if(prevEl != null && prevEl instanceof DropdownMenuButton) {
+                    el._containerEl.style.borderTopLeftRadius = "0px";
+                    el._containerEl.style.borderTopRightRadius = "0px";
                 }
-                if(nextEl != null && nextEl instanceof DropdownButtonElement) {
-                    el.containerEl.style.borderBottomLeftRadius = "0px";
-                    el.containerEl.style.borderBottomRightRadius = "0px";
+                if(nextEl != null && nextEl instanceof DropdownMenuButton) {
+                    el._containerEl.style.borderBottomLeftRadius = "0px";
+                    el._containerEl.style.borderBottomRightRadius = "0px";
                 }
             }
         }
     }
 
     public setPosition(x: number, y: number): this {
-        if(x + this.containerEl.offsetWidth > window.innerWidth) {
-            this.containerEl.style.right = (window.innerWidth - x) + "px";
+        if(x + this._containerEl.offsetWidth > window.innerWidth) {
+            this._containerEl.style.right = (window.innerWidth - x) + "px";
         } else {
-            this.containerEl.style.left = x + "px";
+            this._containerEl.style.left = x + "px";
         }
         console.log(y, window.innerHeight);
-        if(y + this.containerEl.offsetHeight > window.innerHeight) {
-            this.containerEl.style.bottom = (window.innerHeight - y) + "px";
+        if(y + this._containerEl.offsetHeight > window.innerHeight) {
+            this._containerEl.style.bottom = (window.innerHeight - y) + "px";
         } else {
-            this.containerEl.style.top = y + "px";
+            this._containerEl.style.top = y + "px";
         }
         return this;
     }
 
     public animateOpen(): this {
-        this.containerEl.animate([
+        this._containerEl.animate([
             {
                 minHeight: "0px",
                 height: "0px",
@@ -276,7 +344,7 @@ export class DropdownMenuElement {
             },
             {
                 minHeight: "0px",
-                height: (this.containerEl.clientHeight - 8) + "px",
+                height: (this._containerEl.clientHeight - 8) + "px",
                 scale: "1",
                 transformOrigin: "top left",
                 opacity: "1",
@@ -287,10 +355,10 @@ export class DropdownMenuElement {
     }
 
     public animateClose(): this {
-        this.containerEl.animate([
+        this._containerEl.animate([
             {
                 minHeight: "0px",
-                height: (this.containerEl.clientHeight - 8) + "px",
+                height: (this._containerEl.clientHeight - 8) + "px",
                 scale: "1",
                 transformOrigin: "top left",
                 opacity: "1",
@@ -303,48 +371,8 @@ export class DropdownMenuElement {
                 opacity: "0",
             },
         ], { duration: 150, easing: "ease-in-out" });
-        this.containerEl.style.opacity = "0";
-        this.containerEl.style.pointerEvents = "none";
+        this._containerEl.style.opacity = "0";
+        this._containerEl.style.pointerEvents = "none";
         return this;
     }
-}
-
-const dropdownMenuElementCreator = {
-    button: () => new DropdownButtonElement(),
-    buttonLabel: (text: string) => new DropdownButtonLabelElement().setText(text),
-    divider: () => new DropdownDividerElement(),
-    textButton: (text: string, keybind: string) => {
-        let btn = new DropdownButtonElement();
-        btn.append(new DropdownButtonLabelElement().setText(text));
-        let keybindEl = new DropdownButtonLabelElement().setText(keybind);
-        keybindEl.containerEl.classList.add("dropdown-keybind-label");
-        btn.append(keybindEl);
-        return btn;
-    },
-    decorativeButton: (first: string, text: string, last?: string | DropdownMenuCreateCallback) => {
-        let btn = new DropdownButtonElement();
-        let iconEl = new DropdownButtonIconElement();
-        btn.append(iconEl);
-        if(first !== "") {
-            let parts = first.split("/");
-            let iconName = parts[0]!;
-            let iconScale = parseFloat(parts[1] ?? "1");
-            if(!isFinite(iconScale)) iconScale = 1;
-            iconEl.setIcon("./src/icons/" + iconName);
-            iconEl.setScale(iconScale);
-        }
-        btn.append(new DropdownButtonLabelElement().setText(text));
-        if(typeof last === "string") {
-            let keybindEl = new DropdownButtonLabelElement().setText(last);
-            keybindEl.containerEl.classList.add("dropdown-keybind-label");
-            btn.append(keybindEl);
-        } else if(typeof last === "function") {
-            let iconEl = new DropdownButtonIconElement();
-            iconEl.containerEl.classList.add("dropdown-button-expand-icon");
-            iconEl.setIcon("./src/icons/triangle.svg");
-            iconEl.setScale(0.5);
-            btn.append(iconEl);
-        }
-        return btn;
-    },
 }
