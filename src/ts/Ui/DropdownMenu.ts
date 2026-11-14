@@ -319,13 +319,13 @@ export class DropdownMenu {
 
     public setPosition(x: number, y: number): this {
         if(x + this._containerEl.offsetWidth > window.innerWidth) {
-            this._containerEl.style.right = (window.innerWidth - x) + "px";
+            this._containerEl.style.left = (x - this._containerEl.offsetWidth) + "px";
         } else {
             this._containerEl.style.left = x + "px";
         }
         console.log(y, window.innerHeight);
         if(y + this._containerEl.offsetHeight > window.innerHeight) {
-            this._containerEl.style.bottom = (window.innerHeight - y) + "px";
+            this._containerEl.style.top = (y - this._containerEl.offsetHeight) + "px";
         } else {
             this._containerEl.style.top = y + "px";
         }
