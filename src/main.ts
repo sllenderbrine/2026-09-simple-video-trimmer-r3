@@ -47,17 +47,17 @@ new DropdownMenu(k0 => {
     k0.addButton(k1 => { k1.addPrefixIcon2("sort-down.svg", 0.8); k1.addTitle2("Sort By"); k1.addChildMenu(k2 => {
         k2.setPosition2(k1);
         k2._containerEl.style.width = "150px";
-        k2.addButton(k3 => { k3.addRadioToggle(); k3.addTitle2("Name") });
+        k2.addButton(k3 => { k3.addRadioToggle().enable(); k3.addTitle2("Name") });
         k2.addButton(k3 => { k3.addRadioToggle(); k3.addTitle2("Date") });
         k2.addButton(k3 => { k3.addRadioToggle(); k3.addTitle2("Size") });
         k2.addDivider();
-        k2.addButton(k3 => { k3.addRadioToggle(); k3.addTitle2("Ascending") });
+        k2.addButton(k3 => { k3.addRadioToggle().enable(); k3.addTitle2("Ascending") });
         k2.addButton(k3 => { k3.addRadioToggle(); k3.addTitle2("Descending") });
     }); });
     k0.addButton(k1 => { k1.addPrefixIcon2("filter.svg", 0.8); k1.addTitle2("View"); k1.addChildMenu(k2 => {
         k2.setPosition2(k1);
         k2._containerEl.style.width = "150px";
-        k2.addButton(k3 => { k3.addRadioToggle(); k3.addTitle2("Tiles") });
+        k2.addButton(k3 => { k3.addRadioToggle().enable(); k3.addTitle2("Tiles") });
         k2.addButton(k3 => { k3.addRadioToggle(); k3.addTitle2("List") });
         k2.addButton(k3 => { k3.addRadioToggle(); k3.addTitle2("Compact") });
     }); });

@@ -114,21 +114,48 @@ export const DROPDOWNMENU_STYLE = CssUtility.adoptStyle(`
         }
     }
 
+    .dropdownmenu-radiotogglecontainer {
+        width: 16px;
+        height: var(--item-height);
+        flex: 0 0 auto;
+        user-select: none;
+        pointer-events: none;
+        opacity: 0.5;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 0px 4px;
+    }
+
     .dropdownmenu-radiotoggle {
-        width: 50%;
-        height: 50%;
-        outline: 1px solid white;
+        width: calc(var(--item-height) * 0.2);
+        height: calc(var(--item-height) * 0.2);
+        outline: 1.5px solid var(--text);
+        border: 2px solid var(--bg1);
+        border-radius: var(--item-height);
     }
 `);
 
 export class DropdownMenuRadioToggle {
     public _containerEl: HTMLDivElement;
     public _contentEl: HTMLDivElement;
+    public _value = false;
     constructor() {
         this._containerEl = document.createElement("div");
-        this._containerEl.classList.add("dropdownmenu-prefixicon");
+        this._containerEl.classList.add("dropdownmenu-radiotogglecontainer");
         this._contentEl = document.createElement("div");
         this._contentEl.classList.add("dropdownmenu-radiotoggle");
+        this._containerEl.appendChild(this._contentEl);
+    }
+    
+    public enable() {
+        this._value = true;
+        this._contentEl.style.backgroundColor = "var(--text)";
+    }
+    
+    public disable() {
+        this._value = false;
+        this._contentEl.style.backgroundColor = "";
     }
 }
 
