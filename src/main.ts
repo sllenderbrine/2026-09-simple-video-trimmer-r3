@@ -61,4 +61,13 @@ new DropdownMenu(k0 => {
         k2.addButton(k3 => { k3.addRadioToggle(); k3.addTitle2("List") });
         k2.addButton(k3 => { k3.addRadioToggle(); k3.addTitle2("Compact") });
     }); });
+    k0.addButton(k1 => { k1.addTitle2("Test"); k1.addChildMenu(k2 => {
+        k2.setPosition2(k1);
+        k2._containerEl.style.width = "150px";
+        k2.addButton(k3 => { k3.addTitle2("Test"); k3.addChildMenu(k4 => {
+            k4.setPosition2(k3);
+            k4._containerEl.style.width = "150px";
+            k4.addButton(k5 => { k5.addTitle2("Test"); });
+        }); });
+    }); });
 });

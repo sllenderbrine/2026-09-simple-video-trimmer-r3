@@ -261,7 +261,7 @@ export class DropdownMenuButton {
             if(this._parentMenu == null)
                 return;
             if(this._parentMenu._childMenu != null) {
-                this._parentMenu._childMenu._containerEl.remove();
+                this._parentMenu._childMenu.remove();
                 this._parentMenu._childMenu = null;
             }
             if(this._childMenuK != null) {
@@ -534,16 +534,17 @@ export class DropdownMenu {
         }
         this._hoverLostTimeout = setTimeout(() => {
             this._childMenu?.remove();
+            this._childMenu = null;
         }, 150);
     }
 
     public remove() {
         this.animateClose();
+        if(this._childMenu != null) {
+            this._childMenu.remove();
+            this._childMenu = null;
+        }
         setTimeout(() => {
-            if(this._childMenu != null) {
-                this._childMenu.remove();
-                this._childMenu = null;
-            }
             this._containerEl.remove();
         }, 150);
     }
