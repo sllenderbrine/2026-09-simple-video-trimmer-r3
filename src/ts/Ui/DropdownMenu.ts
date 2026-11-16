@@ -382,7 +382,8 @@ export class DropdownMenu {
     public _hoverLostTimeout: number | null = null;
     public _x = 0;
     public _y = 0;
-    public _xw = 0;
+    public _xs = 0;
+    public _ys = 0;
     constructor(callback?: (k: DropdownMenu) => void) {
         this._containerEl = document.createElement("div");
         this._containerEl.classList.add("dropdownmenu");
@@ -452,13 +453,13 @@ export class DropdownMenu {
     public updatePosition() {
         if(this._initCallbackActive)
             return;
-        if((this._x + this._xw) + this._containerEl.offsetWidth > window.innerWidth) {
+        if((this._x + this._xs) + this._containerEl.offsetWidth > window.innerWidth) {
             this._containerEl.style.left = (this._x - this._containerEl.offsetWidth) + "px";
         } else {
-            this._containerEl.style.left = (this._x + this._xw) + "px";
+            this._containerEl.style.left = (this._x + this._xs) + "px";
         }
         if(this._y + this._containerEl.offsetHeight > window.innerHeight) {
-            this._containerEl.style.top = (this._y - this._containerEl.offsetHeight) + "px";
+            this._containerEl.style.top = (this._y + this._ys - this._containerEl.offsetHeight) + "px";
         } else {
             this._containerEl.style.top = this._y + "px";
         }
@@ -467,7 +468,8 @@ export class DropdownMenu {
     public setPosition(x: number, y: number) {
         this._x = x;
         this._y = y;
-        this._xw = 0;
+        this._xs = 0;
+        this._ys = 0;
         this.updatePosition();
     }
 
@@ -475,7 +477,8 @@ export class DropdownMenu {
         let rect = button._containerEl.getBoundingClientRect();
         this._x = rect.left;
         this._y = rect.top;
-        this._xw = rect.width;
+        this._xs = rect.width;
+        this._ys = rect.height;
         this.updatePosition();
     }
 
