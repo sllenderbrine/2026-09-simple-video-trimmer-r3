@@ -380,6 +380,9 @@ export class DropdownMenu {
     public _parentMenu: DropdownMenu | null = null;
     public _isHovering = false;
     public _hoverLostTimeout: number | null = null;
+    public _x = 0;
+    public _y = 0;
+    public _xw = 0;
     constructor(callback?: (k: DropdownMenu) => void) {
         this._containerEl = document.createElement("div");
         this._containerEl.classList.add("dropdownmenu");
@@ -390,6 +393,7 @@ export class DropdownMenu {
         this._initCallbackActive = true;
         callback?.(this);
         this._initCallbackActive = false;
+        this.updatePosition();
         this.animateOpen();
         this.updateBorderRadius();
         this._containerEl.addEventListener("mouseenter", e => {
@@ -445,31 +449,39 @@ export class DropdownMenu {
         }
     }
 
+    public updatePosition() {
+        if(this._initCallbackActive)
+            return;
+        if((this._x + this._xw) + this._containerEl.offsetWidth > window.innerWidth) {
+            this._containerEl.style.left = (this._x - this._containerEl.offsetWidth) + "px";
+        } else {
+            this._containerEl.style.left = (this._x + this._xw) + "px";
+        }
+        if(this._y + this._containerEl.offsetHeight > window.innerHeight) {
+            this._containerEl.style.top = (this._y - this._containerEl.offsetHeight) + "px";
+        } else {
+            this._containerEl.style.top = this._y + "px";
+        }
+    }
+
     public setPosition(x: number, y: number) {
-        if(x + this._containerEl.offsetWidth > window.innerWidth) {
-            this._containerEl.style.left = (x - this._containerEl.offsetWidth) + "px";
-        } else {
-            this._containerEl.style.left = x + "px";
-        }
-        if(y + this._containerEl.offsetHeight > window.innerHeight) {
-            this._containerEl.style.top = (y - this._containerEl.offsetHeight) + "px";
-        } else {
-            this._containerEl.style.top = y + "px";
-        }
+        this._x = x;
+        this._y = y;
+        this._xw = 0;
+        this.updatePosition();
     }
 
     public setPosition2(button: DropdownMenuButton) {
         let rect = button._containerEl.getBoundingClientRect();
-        if(rect.left + rect.width + this._containerEl.offsetWidth > window.innerWidth) {
-            this._containerEl.style.left = (rect.left - this._containerEl.offsetWidth) + "px";
-        } else {
-            this._containerEl.style.left = (rect.left + rect.width) + "px";
-        }
-        if(rect.top + this._containerEl.offsetHeight > window.innerHeight) {
-            this._containerEl.style.top = (rect.top - this._containerEl.offsetHeight) + "px";
-        } else {
-            this._containerEl.style.top = rect.top + "px";
-        }
+        this._x = rect.left;
+        this._y = rect.top;
+        this._xw = rect.width;
+        this.updatePosition();
+    }
+
+    public setWidth(x: number) {
+        this._containerEl.style.width = x + "px";
+        this.updatePosition();
     }
 
     public animateOpen() {

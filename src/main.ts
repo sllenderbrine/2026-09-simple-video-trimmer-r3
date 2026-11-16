@@ -1,6 +1,6 @@
 // import { invoke } from "@tauri-apps/api/core";
 
-import { DropdownMenu } from "./ts/Ui/DropdownMenu";
+import { DropdownMenu, DropdownMenuButton } from "./ts/Ui/DropdownMenu";
 
 // let greetInputEl: HTMLInputElement | null;
 // let greetMsgEl: HTMLElement | null;
@@ -43,10 +43,10 @@ new DropdownMenu(k0 => {
 
 new DropdownMenu(k0 => {
     k0.setPosition(400, 80);
-    k0._containerEl.style.width = "150px";
+    k0.setWidth(150);
     k0.addButton(k1 => { k1.addPrefixIcon2("sort-down.svg", 0.8); k1.addTitle2("Sort By"); k1.addChildMenu(k2 => {
         k2.setPosition2(k1);
-        k2._containerEl.style.width = "150px";
+        k2.setWidth(150);
         k2.addButton(k3 => { k3.addRadioToggle().enable(); k3.addTitle2("Name") });
         k2.addButton(k3 => { k3.addRadioToggle(); k3.addTitle2("Date") });
         k2.addButton(k3 => { k3.addRadioToggle(); k3.addTitle2("Size") });
@@ -56,18 +56,15 @@ new DropdownMenu(k0 => {
     }); });
     k0.addButton(k1 => { k1.addPrefixIcon2("filter.svg", 0.8); k1.addTitle2("View"); k1.addChildMenu(k2 => {
         k2.setPosition2(k1);
-        k2._containerEl.style.width = "150px";
+        k2.setWidth(150);
         k2.addButton(k3 => { k3.addRadioToggle().enable(); k3.addTitle2("Tiles") });
         k2.addButton(k3 => { k3.addRadioToggle(); k3.addTitle2("List") });
         k2.addButton(k3 => { k3.addRadioToggle(); k3.addTitle2("Compact") });
     }); });
-    k0.addButton(k1 => { k1.addTitle2("Test"); k1.addChildMenu(k2 => {
+    let testMenu = (k1: DropdownMenuButton, k2: DropdownMenu) => {
         k2.setPosition2(k1);
-        k2._containerEl.style.width = "150px";
-        k2.addButton(k3 => { k3.addTitle2("Test"); k3.addChildMenu(k4 => {
-            k4.setPosition2(k3);
-            k4._containerEl.style.width = "150px";
-            k4.addButton(k5 => { k5.addTitle2("Test"); });
-        }); });
-    }); });
+        k2.setWidth(150);
+        k2.addButton(k3 => { k3.addTitle2("Test"); k3.addChildMenu(k4 => { testMenu(k3, k4); }) });
+    }
+    k0.addButton(k1 => { k1.addTitle2("Test"); k1.addChildMenu(k2 => testMenu(k1, k2)); });
 });
