@@ -1,8 +1,6 @@
-#### Simple Video Trimmer
+##### Simple Video Trimmer
 
-
-
-Tauri app made for organizing and trimming gameplay clips.
+A Tauri app for organizing and trimming gameplay clips.
 
 
 
@@ -16,9 +14,9 @@ Tauri app made for organizing and trimming gameplay clips.
 
 ###### Planned Features
 
-* 📁 Browse and preview videos on your device
-* ✂️ Trim, crop, and rename videos
-* 💾 Save and apply edits in place of the original
-* 📋 Queue multiple edits automatically
-* ♻️ Original files are put in your Recycle Bin
+* 📁 Browse videos on your device
+* ✂️ Trim, crop, and rename videos fast
+* 🏷️ Organize your videos with custom tags and descriptions
+* 📃 Export your data at any time
+* 🎥 Watch your clips while the edits are still processing
 
