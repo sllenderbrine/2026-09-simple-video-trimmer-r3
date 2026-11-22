@@ -495,7 +495,6 @@ export class DropdownMenu {
                 scale: "0.9",
                 transformOrigin: "top left",
                 opacity: "0",
-                pointerEvents: "none",
             },
             {
                 minHeight: "0px",
@@ -503,7 +502,6 @@ export class DropdownMenu {
                 scale: "1",
                 transformOrigin: "top left",
                 opacity: "1",
-                pointerEvents: "none",
             },
         ], { duration: 150, easing: "ease-in-out" });
     }
