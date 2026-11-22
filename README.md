@@ -1,4 +1,4 @@
-##### Simple Video Trimmer
+#### Simple Video Trimmer
 
 A Tauri app for organizing and trimming gameplay clips.
 
