@@ -1,4 +1,4 @@
-import { CssUtility } from "../../../Utility/CssUtility";
+import { CssUtility } from "../../../Utility";
 import { CtxmButton } from "./CtxmButton";
 import { CtxmDivider } from "./CtxmDivider";
 import { ContextMenuPrivate } from "../Private/ContextMenuPrivate";

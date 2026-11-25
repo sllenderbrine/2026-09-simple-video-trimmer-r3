@@ -1,4 +1,4 @@
-import { CssUtility } from "../Utility/CssUtility";
+import { CssUtility } from "../Utility";
 
 export const DROPDOWNMENU_STYLE = CssUtility.adoptStyle(`
     .dropdownmenu {

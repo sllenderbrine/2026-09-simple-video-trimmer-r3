@@ -1,4 +1,4 @@
-import { MathUtility } from "../../../Utility/MathUtility";
+import { MathUtility } from "../../../Utility";
 import { ContextMenu, ContextMenuChild } from "../Public/ContextMenu";
 import { CtxmButton } from "../Public/CtxmButton";
 import { CtxmDivider } from "../Public/CtxmDivider";
