@@ -18,4 +18,24 @@ export class CtxmButton {
         const menuPrivate = ContextMenuPrivate.get(this.menu)!;
         menuPrivate.updateLayout();
     }
+
+    public setKeybind(text: string | null) {
+        this._private.setKeybind(text);
+        const menuPrivate = ContextMenuPrivate.get(this.menu)!;
+        menuPrivate.updateLayout();
+    }
+
+    public setPrefixIcon(src: string | null) {
+        this._private.setPrefixIcon(src);
+        const menuPrivate = ContextMenuPrivate.get(this.menu)!;
+        menuPrivate.updateLayout();
+    }
+
+    public setSvgIcon(name: string | null, scale?: number) {
+        this._private.setPrefixIcon("./src/icons/" + name + ".svg");
+        if(scale !== undefined)
+            this._private.setPrefixIconScale(scale);
+        const menuPrivate = ContextMenuPrivate.get(this.menu)!;
+        menuPrivate.updateLayout();
+    }
 }

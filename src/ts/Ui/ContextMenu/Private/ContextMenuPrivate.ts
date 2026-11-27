@@ -5,14 +5,16 @@ import { CtxmDivider } from "../Public/CtxmDivider";
 import { CtxmButtonPrivate } from "./CtxmButtonPrivate";
 import { CtxmDividerPrivate } from "./CtxmDividerPrivate";
 
-const privateMap = new WeakMap<any, ContextMenuPrivate>();
+const HEIGHT_PADDING = 6;
+
+const privateMap = new WeakMap<ContextMenu, ContextMenuPrivate>();
 
 export function getCtxmChildPrivate(child: ContextMenuChild) {
     switch(child.constructor) {
         case CtxmDivider:
-            return CtxmDividerPrivate.get(child);
+            return CtxmDividerPrivate.get(child as CtxmDivider);
         case CtxmButton:
-            return CtxmButtonPrivate.get(child);
+            return CtxmButtonPrivate.get(child as CtxmButton);
     }
 }
 
@@ -33,8 +35,16 @@ export class ContextMenuPrivate {
     public offscreenOffsetY = 0;
     public dodgedRightEdge = false;
     public dodgedBottomEdge = false;
+    public hasScrollbar = false;
     public containerEl: HTMLDivElement;
+    public backgroundContentEl: HTMLDivElement;
+    public backgroundEl: HTMLDivElement;
+    public overlayEl: HTMLDivElement;
+    public contentScrollEl: HTMLDivElement;
     public contentEl: HTMLDivElement;
+    public interactScrollEl: HTMLDivElement;
+    public interactEl: HTMLDivElement;
+    public scrollbarEl?: HTMLDivElement;
     constructor(
         obj: ContextMenu,
     ) {
@@ -44,25 +54,76 @@ export class ContextMenuPrivate {
         this.containerEl = document.createElement("div");
         this.containerEl.classList.add("dropdownmenu");
         document.body.appendChild(this.containerEl);
+    
+        this.backgroundContentEl = document.createElement("div");
+        this.backgroundContentEl.classList.add("dropdownmenu-backgroundcontent");
+        this.containerEl.appendChild(this.backgroundContentEl);
+    
+        this.backgroundEl = document.createElement("div");
+        this.backgroundEl.classList.add("dropdownmenu-background");
+        this.backgroundContentEl.appendChild(this.backgroundEl);
+
+        this.contentScrollEl = document.createElement("div");
+        this.contentScrollEl.classList.add("dropdownmenu-contentscroll");
+        this.containerEl.appendChild(this.contentScrollEl);
 
         this.contentEl = document.createElement("div");
         this.contentEl.classList.add("dropdownmenu-content");
-        this.containerEl.appendChild(this.contentEl);
+        this.contentScrollEl.appendChild(this.contentEl);
+
+        this.interactScrollEl = document.createElement("div");
+        this.interactScrollEl.classList.add("dropdownmenu-interactscroll");
+        this.containerEl.appendChild(this.interactScrollEl);
+
+        this.interactEl = document.createElement("div");
+        this.interactEl.classList.add("dropdownmenu-interact");
+        this.interactScrollEl.appendChild(this.interactEl);
+    
+        this.overlayEl = document.createElement("div");
+        this.overlayEl.classList.add("dropdownmenu-overlay");
+        this.containerEl.appendChild(this.overlayEl);
+
+        this.interactScrollEl.addEventListener("scroll", e => {
+            this.updateContentScrollTop();
+        });
     }
 
-    public static get(obj: any) {
+    public static get(obj: ContextMenu) {
         return privateMap.get(obj);
     }
 
+    public updateContentScrollTop() {
+        this.contentScrollEl.scrollTop = this.interactScrollEl.scrollTop;
+        if(this.scrollbarEl !== undefined) {
+            let sh = this.contentScrollEl.offsetHeight - 12;
+            let shd = (this.contentEl.offsetHeight - this.contentScrollEl.offsetHeight);
+            sh -= 0.5 * Math.min(shd, 200);
+            sh -= 0.05 * Math.max(shd - 200, 0);
+            sh = Math.max(sh, 24);
+            this.scrollbarEl.style.height = sh + "px";
+            let th = this.contentScrollEl.offsetHeight - this.scrollbarEl.offsetHeight - 13;
+            this.scrollbarEl.style.top = (6 + this.contentScrollEl.scrollTop / (this.contentEl.offsetHeight - this.contentScrollEl.offsetHeight) * th) + "px";
+        }
+    }
+
     public updateLayout() {
+        let maxKw = 0;
+        let widthKw = 0;
         let width = 0;
-        let top = 0;
+        let top = HEIGHT_PADDING;
         for(const child of this.children) {
             const priv = getCtxmChildPrivate(child)!;
             if(child.constructor === CtxmButton) {
-                let w = (priv as CtxmButtonPrivate).getTargetWidth();
-                if(w > width)
+                const priv2 = priv as CtxmButtonPrivate;
+                priv2.updateTargetWidth();
+                let w = priv2.targetWidth;
+                let kw = priv2.keybindWidth;
+                if(w > width) {
                     width = w;
+                    widthKw = kw;
+                }
+                if(kw > maxKw)
+                    maxKw = kw;
                 priv.setTop(top);
                 top += 24;
             } else if(child.constructor === CtxmDivider) {
@@ -70,16 +131,41 @@ export class ContextMenuPrivate {
                 top += 9;
             }
         }
+        width = width - widthKw + maxKw;
+        top += HEIGHT_PADDING + 1;
+        width += this.hasScrollbar ? 6 : 0
         this.targetWidth = width;
         this.targetHeight = top;
+        this.hasScrollbar = top > this.maxHeight;
         this.width = MathUtility.clamp(width, this.minWidth, this.maxWidth);
         this.containerEl.style.width = this.width + "px";
+        this.contentEl.style.width = this.width + "px";
+        this.interactEl.style.width = this.width + "px";
         this.height = MathUtility.clamp(top, this.minHeight, this.maxHeight);
         this.containerEl.style.height = this.height + "px";
-        for(const child of this.children) {
+        this.contentEl.style.height = this.targetHeight + "px";
+        this.interactEl.style.height = this.targetHeight + "px";
+        this.children.forEach((child, i) => {
             const priv = getCtxmChildPrivate(child)!;
-            priv.setWidth(this.width);
+            priv.setWidth(this.width + (this.hasScrollbar ? -6 : 0));
+            if(child.constructor === CtxmButton) {
+                const priv2 = priv as CtxmButtonPrivate;
+                priv2.updateStyleNeighboring(this.children[i - 1], this.children[i + 1]);
+            }
+        });
+        if(this.hasScrollbar) {
+            if(this.scrollbarEl === undefined) {
+                this.scrollbarEl = document.createElement("div");
+                this.scrollbarEl.classList.add("dropdownmenu-scrollbar");
+                this.backgroundContentEl.appendChild(this.scrollbarEl);
+            }
+        } else {
+            if(this.scrollbarEl !== undefined) {
+                this.scrollbarEl.remove();
+                delete this.scrollbarEl;
+            }
         }
+        this.updateContentScrollTop();
     }
 
     public updateScreenPositionX() {

@@ -1,57 +1,8 @@
-import { CssUtility } from "../../../Utility";
 import { CtxmButton } from "./CtxmButton";
 import { CtxmDivider } from "./CtxmDivider";
 import { ContextMenuPrivate } from "../Private/ContextMenuPrivate";
 
-export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
-    .dropdownmenu {
-        container-type: size;
-        position: absolute;
-        background-color: var(--bg1);
-        border-radius: 8px;
-        padding: 4px 4px;
-        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
-        user-select: none;
-    }
-
-    .dropdownmenu-content {
-        position: absolute;
-        width: 100cqw;
-        height: 100cqh;
-        display: flex;
-        flex-direction: column;
-        overflow-x: hidden;
-        overflow-y: auto;
-        scrollbar-width: none;
-    }
-
-    .dropdownmenu-divider {
-        position: absolute;
-        width: 100%;
-        height: 1px;
-        background-color: var(--bg2);
-    }
-
-    .dropdownmenu-button {
-        position: absolute;
-        width: 100%;
-        height: 24px;
-        display: flex;
-    }
-
-    .dropdownmenu-title {
-        height: 24px;
-        left: 0px;
-        top: 0px;
-        position: absolute;
-        align-content: center;
-        text-align: left;
-        white-space: nowrap;
-        overflow: hidden;
-        user-select: none;
-        pointer-events: none;
-    }
-`);
+export * from "./_css";
 
 export type ContextMenuChild = CtxmDivider | CtxmButton;
 
@@ -170,5 +121,34 @@ export class ContextMenu {
     public set maxHeight(v: number) {
         this._private.maxHeight = v;
         this._private.updateLayout();
+    }
+
+    public get hasScrollbar() {
+        return this._private.hasScrollbar;
+    }
+
+    public static new(callback?: (k: ContextMenu) => void) {
+        const k = new ContextMenu();
+        callback?.(k);
+        return k;
+    }
+
+    public button(callback?: (k: CtxmButton) => void) {
+        const k = new CtxmButton(this);
+        callback?.(k);
+        return k;
+    }
+
+    public divider(callback?: (k: CtxmDivider) => void) {
+        const k = new CtxmDivider(this);
+        callback?.(k);
+        return k;
+    }
+
+    public svgbutton(title: string, iconSrc: string, iconScale: number, keybind?: string | null, onclick?: () => void) {
+        const btn = new CtxmButton(this);
+        btn.setTitle(title);
+        btn.setKeybind(keybind === undefined ? null : keybind);
+        btn.setSvgIcon(iconSrc, iconScale);
     }
 }

@@ -1,0 +1,26 @@
+:root[data-theme="red"] {
+    --bg0: rgb(19, 5, 8);
+    --bg1: rgb(31, 6, 8);
+    --bg2: rgb(87, 46, 50);
+    --text: rgb(230, 233, 235);
+    --text1: rgb(208, 174, 178);
+    --text2: rgb(126, 78, 86);
+}
+
+:root[data-theme="dark"] {
+    --bg0: rgb(15, 15, 16);
+    --bg1: rgb(26, 26, 28);
+    --bg2: rgb(79, 81, 85);
+    --text: rgb(230, 233, 235);
+    --text1: rgb(130, 138, 141);
+    --text2: rgb(87, 92, 93);
+}
+
+:root[data-theme="dark-flat"] {
+    --bg0: rgb(15, 15, 16);
+    --bg1: rgb(26, 26, 28);
+    --bg2: rgb(79, 81, 85);
+    --text: rgb(230, 233, 235);
+    --text1: rgb(130, 138, 141);
+    --text2: rgb(87, 92, 93);
+}
