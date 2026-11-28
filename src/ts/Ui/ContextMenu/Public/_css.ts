@@ -70,7 +70,7 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
         border-radius: 8px;
     }
 
-    .dropdownmenu-backgroundcontent {
+    .dropdownmenu-backgroundcontainer {
         position: absolute;
         border-radius: 8px;
         width: 100cqw;
@@ -189,23 +189,35 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
 
     .dropdownmenu-scrollbar {
         position: absolute;
-        background-color: var(--bg2);
+        background-color: rgba(255, 255, 255, 1);
         width: 4px;
         height: 50%;
         right: 6px;
         border-radius: 4px;
         top: 0px;
+        opacity: 0.25;
+        transition: opacity 0.2s ease;
+        pointer-events: none;
+        user-select: none;
+    }
+
+    .dropdownmenu[data-scrollbar-visible="false"][data-scrollbar-hover="false"] .dropdownmenu-scrollbar {
+        opacity: 0.05;
+    }
+
+    .dropdownmenu[data-scrollbar-hover="true"] .dropdownmenu-scrollbar {
+        opacity: 0.6;
+    }
+
+    .dropdownmenu-scrollbarinteract {
+        position: absolute;
+        width: 13px;
+        height: 50%;
+        right: 0px;
+        top: 0px;
         z-index: 2;
-        opacity: 1;
-        transition: opacity 0.2s ease, filter 0.2s ease;
-    }
-
-    .dropdownmenu[data-scrollbar-visible="false"] .dropdownmenu-scrollbar {
-        opacity: 0.2;
-    }
-
-    .dropdownmenu-scrollbar:hover {
-        filter: brightness(1.5);
+        user-select: none;
+        cursor: pointer;
     }
 
     .dropdownmenu-buttoninteract {

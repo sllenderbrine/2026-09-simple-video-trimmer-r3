@@ -41,7 +41,7 @@ export class ContextMenuPrivate {
     public eventOwner = new EventOwner();
     public scrollbarEvents = new EventOwner();
     public containerEl: HTMLDivElement;
-    public backgroundContentEl: HTMLDivElement;
+    public backgroundContainerEl: HTMLDivElement;
     public backgroundEl: HTMLDivElement;
     public overlayEl: HTMLDivElement;
     public contentScrollEl: HTMLDivElement;
@@ -49,6 +49,7 @@ export class ContextMenuPrivate {
     public interactScrollEl: HTMLDivElement;
     public interactEl: HTMLDivElement;
     public scrollbarEl?: HTMLDivElement;
+    public scrollbarInteractEl?: HTMLDivElement;
     constructor(
         obj: ContextMenu,
     ) {
@@ -58,15 +59,16 @@ export class ContextMenuPrivate {
         this.containerEl = document.createElement("div");
         this.containerEl.classList.add("dropdownmenu");
         this.containerEl.setAttribute("data-scrollbar-visible", "false");
+        this.containerEl.setAttribute("data-scrollbar-hover", "false");
         document.body.appendChild(this.containerEl);
     
-        this.backgroundContentEl = document.createElement("div");
-        this.backgroundContentEl.classList.add("dropdownmenu-backgroundcontent");
-        this.containerEl.appendChild(this.backgroundContentEl);
+        this.backgroundContainerEl = document.createElement("div");
+        this.backgroundContainerEl.classList.add("dropdownmenu-backgroundcontainer");
+        this.containerEl.appendChild(this.backgroundContainerEl);
     
         this.backgroundEl = document.createElement("div");
         this.backgroundEl.classList.add("dropdownmenu-background");
-        this.backgroundContentEl.appendChild(this.backgroundEl);
+        this.backgroundContainerEl.appendChild(this.backgroundEl);
 
         this.contentScrollEl = document.createElement("div");
         this.contentScrollEl.classList.add("dropdownmenu-contentscroll");
@@ -121,8 +123,10 @@ export class ContextMenuPrivate {
             sh -= 0.05 * Math.max(t - 200, 0);
             sh = Math.max(sh, 24);
             this.scrollbarEl.style.height = sh + "px";
+            this.scrollbarInteractEl!.style.height = sh + "px";
             let th = this.contentScrollEl.offsetHeight - this.scrollbarEl.offsetHeight - 13;
-            this.scrollbarEl.style.top = (6 + this.contentScrollEl.scrollTop / t * th + this.interactScrollEl.scrollTop) + "px";
+            this.scrollbarEl.style.top = (6 + this.contentScrollEl.scrollTop / t * th) + "px";
+            this.scrollbarInteractEl!.style.top = (6 + this.contentScrollEl.scrollTop / t * th + this.interactScrollEl.scrollTop) + "px";
         }
     }
 
@@ -177,14 +181,19 @@ export class ContextMenuPrivate {
             if(this.scrollbarEl === undefined) {
                 this.scrollbarEl = document.createElement("div");
                 this.scrollbarEl.classList.add("dropdownmenu-scrollbar");
-                this.interactScrollEl.appendChild(this.scrollbarEl);
+                this.backgroundContainerEl.appendChild(this.scrollbarEl);
+                
+                this.scrollbarInteractEl = document.createElement("div");
+                this.scrollbarInteractEl.classList.add("dropdownmenu-scrollbarinteract");
+                this.interactScrollEl.appendChild(this.scrollbarInteractEl);
 
                 let scrollbar = this.scrollbarEl;
 
                 let evs = new EventOwner();
                 let mdY = 0;
                 let mdT = 0;
-                new HtmlListener(this.scrollbarEl, "mousedown", e => {
+                let hover = false;
+                new HtmlListener(this.scrollbarInteractEl, "mousedown", e => {
                     this.scrollbarScrub = true;
                     mdY = e.clientY;
                     mdT = this.interactScrollEl.scrollTop;
@@ -202,13 +211,25 @@ export class ContextMenuPrivate {
                     new HtmlListener(window, "mouseup", () => {
                         this.scrollbarScrub = false;
                         evs.cancelEventConnections();
+                        this.containerEl.setAttribute("data-scrollbar-hover", hover.toString());
                     }, this.scrollbarEvents, this.eventOwner, evs);
+                }, this.scrollbarEvents, this.eventOwner);
+                new HtmlListener(this.scrollbarInteractEl, "mouseenter", () => {
+                    hover = true;
+                    this.containerEl.setAttribute("data-scrollbar-hover", "true");
+                }, this.scrollbarEvents, this.eventOwner);
+                new HtmlListener(this.scrollbarInteractEl, "mouseleave", () => {
+                    hover = false;
+                    if(!this.scrollbarScrub)
+                        this.containerEl.setAttribute("data-scrollbar-hover", "false");
                 }, this.scrollbarEvents, this.eventOwner);
             }
         } else {
             if(this.scrollbarEl !== undefined) {
                 this.scrollbarEl.remove();
+                this.scrollbarInteractEl!.remove();
                 delete this.scrollbarEl;
+                delete this.scrollbarInteractEl;
                 this.scrollbarEvents.cancelEventConnections();
                 this.scrollbarScrub = false;
             }
