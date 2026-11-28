@@ -64,15 +64,15 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
     .dropdownmenu {
         container-type: size;
         position: absolute;
-        left: 20px;
-        top: 20px;
         user-select: none;
-        border-radius: 8px;
+        --border-radius: 4px;
+        border-radius: var(--border-radius);
+        z-index: 20;
     }
 
     .dropdownmenu-backgroundcontainer {
         position: absolute;
-        border-radius: 8px;
+        border-radius: var(--border-radius);
         width: 100cqw;
         height: 100cqh;
         user-select: none;
@@ -81,7 +81,7 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
 
     .dropdownmenu-background {
         position: absolute;
-        border-radius: 8px;
+        border-radius: var(--border-radius);
         width: 100cqw;
         height: 100cqh;
         pointer-events: none;
@@ -90,7 +90,7 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
 
     .dropdownmenu-overlay {
         position: absolute;
-        border-radius: 8px;
+        border-radius: var(--border-radius);
         width: 100cqw;
         height: 100cqh;
         pointer-events: none;
@@ -252,5 +252,30 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
         background-color: rgba(255, 255, 255, 0.05);
         outline: 1px solid rgba(255, 255, 255, 0.2);
         box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+    }
+
+    .dropdownmenu-header {
+        position: absolute;
+        width: fit-content;
+        height: 16px;
+        align-content: center;
+        background-color: color-mix(in srgb, var(--bg1) 50%, transparent);
+        left: 24px;
+        padding: 0px 8px;
+        color: color-mix(in srgb, var(--text1) 50%, transparent);
+        outline: 2px solid var(--bg1);
+        z-index: -1;
+    }
+
+    .dropdownmenu[data-header-position="top"] .dropdownmenu-header {
+        top: -16px;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+    }
+
+    .dropdownmenu[data-header-position="bottom"] .dropdownmenu-header {
+        bottom: -16px;
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
     }
 `);

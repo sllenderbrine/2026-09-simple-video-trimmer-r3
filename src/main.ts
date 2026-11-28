@@ -6,6 +6,8 @@ document.body.oncontextmenu = e => e.preventDefault();
 document.documentElement.dataset.theme = "dark-flat";
 
 ContextMenu.new(k => {
+    k.setPosition(14, 14);
+    k.setHeader("File Explorer");
     k.tdivider("Explorer");
     k.svgbutton("Move Up Directory", "back", 0.9, "Ctrl + Up Arrow");
     k.svgbutton("Back", "undo", 0.9, "Ctrl + Left Arrow");

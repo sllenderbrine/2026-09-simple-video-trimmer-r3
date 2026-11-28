@@ -247,14 +247,14 @@ export class CtxmButtonPrivate {
 
     public updateStyleNeighboring(prev: ContextMenuChild | undefined, next: ContextMenuChild | undefined) {
         if(this.prefixIconEl !== undefined) {
-            this.prefixIconEl.style.borderTopLeftRadius = prev?.constructor === CtxmButton ? "" : "6px";
-            this.prefixIconEl.style.borderTopRightRadius = prev?.constructor === CtxmButton ? "" : "6px";
-            this.prefixIconEl.style.borderBottomLeftRadius = next?.constructor === CtxmButton ? "" : "6px";
-            this.prefixIconEl.style.borderBottomRightRadius = next?.constructor === CtxmButton ? "" : "6px";
+            this.prefixIconEl.style.borderTopLeftRadius = prev?.constructor === CtxmButton ? "" : "4px";
+            this.prefixIconEl.style.borderTopRightRadius = prev?.constructor === CtxmButton ? "" : "4px";
+            this.prefixIconEl.style.borderBottomLeftRadius = next?.constructor === CtxmButton ? "" : "4px";
+            this.prefixIconEl.style.borderBottomRightRadius = next?.constructor === CtxmButton ? "" : "4px";
         }
-        this.interactEl.style.borderTopLeftRadius = prev?.constructor === CtxmButton ? "" : "6px";
-        this.interactEl.style.borderTopRightRadius = prev?.constructor === CtxmButton ? "" : "6px";
-        this.interactEl.style.borderBottomLeftRadius = next?.constructor === CtxmButton ? "" : "6px";
-        this.interactEl.style.borderBottomRightRadius = next?.constructor === CtxmButton ? "" : "6px";
+        this.interactEl.style.borderTopLeftRadius = prev?.constructor === CtxmButton ? "" : "4px";
+        this.interactEl.style.borderTopRightRadius = prev?.constructor === CtxmButton ? "" : "4px";
+        this.interactEl.style.borderBottomLeftRadius = next?.constructor === CtxmButton ? "" : "4px";
+        this.interactEl.style.borderBottomRightRadius = next?.constructor === CtxmButton ? "" : "4px";
     }
 }

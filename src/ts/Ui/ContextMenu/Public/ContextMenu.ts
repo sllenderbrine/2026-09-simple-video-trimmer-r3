@@ -146,7 +146,7 @@ export class ContextMenu {
         return k;
     }
 
-    public tdivider(title: string) {
+    public tdivider(title?: string | null) {
         const div = new CtxmDivider(this);
         div.setTitle(title);
         return div;
@@ -168,5 +168,16 @@ export class ContextMenu {
             CtxmButtonPrivate.get(btn)!.interactEl.addEventListener("click", onclick);
         // if(childMenuCreator)
         //     btn.setChildCreator(childMenuCreator);
+    }
+
+    public setHeader(text?: string | null) {
+        this._private.setHeader(text);
+    }
+
+    public setPosition(x: number, y: number) {
+        this._private.x = x;
+        this._private.y = y;
+        this._private.updateScreenPositionX();
+        this._private.updateScreenPositionY();
     }
 }

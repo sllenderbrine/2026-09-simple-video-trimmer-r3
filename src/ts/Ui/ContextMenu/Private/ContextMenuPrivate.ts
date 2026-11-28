@@ -27,6 +27,8 @@ export class ContextMenuPrivate {
     public targetHeight = 0;
     public x = 0;
     public y = 0;
+    public left = 0;
+    public top = 0;
     public minWidth = 0;
     public minHeight = 0;
     public maxWidth = 300;
@@ -50,6 +52,7 @@ export class ContextMenuPrivate {
     public interactEl: HTMLDivElement;
     public scrollbarEl?: HTMLDivElement;
     public scrollbarInteractEl?: HTMLDivElement;
+    public headerEl?: HTMLDivElement;
     constructor(
         obj: ContextMenu,
     ) {
@@ -60,6 +63,7 @@ export class ContextMenuPrivate {
         this.containerEl.classList.add("dropdownmenu");
         this.containerEl.setAttribute("data-scrollbar-visible", "false");
         this.containerEl.setAttribute("data-scrollbar-hover", "false");
+        this.containerEl.setAttribute("data-header-position", "bottom");
         document.body.appendChild(this.containerEl);
     
         this.backgroundContainerEl = document.createElement("div");
@@ -239,21 +243,45 @@ export class ContextMenuPrivate {
 
     public updateScreenPositionX() {
         if(this.x + this.width > window.innerWidth) {
-            this.containerEl.style.left = (this.x - this.width + this.offscreenOffsetX) + "px";
+            this.left = (this.x - this.width + this.offscreenOffsetX);
+            this.containerEl.style.left = this.left + "px";
             this.dodgedRightEdge = true;
         } else {
-            this.containerEl.style.left = this.x + "px";
+            this.left = this.x;
+            this.containerEl.style.left = this.left + "px";
             this.dodgedRightEdge = false;
         }
     }
 
     public updateScreenPositionY() {
         if(this.y + this.height > window.innerHeight) {
-            this.containerEl.style.top = (this.y - this.height + this.offscreenOffsetY) + "px";
+            this.top = (this.y - this.height + this.offscreenOffsetY);
+            this.containerEl.style.top = this.top + "px";
             this.dodgedBottomEdge = true;
         } else {
-            this.containerEl.style.top = this.y + "px";
+            this.top = this.y;
+            this.containerEl.style.top = this.top + "px";
             this.dodgedBottomEdge = false;
+        }
+        if(this.top > 22) {
+            this.containerEl.setAttribute("data-header-position", "top");
+        } else {
+            this.containerEl.setAttribute("data-header-position", "bottom");
+        }
+    }
+
+    public setHeader(text?: string | null) {
+        if(text != null) {
+            if(this.headerEl === undefined) {
+                this.headerEl = document.createElement("div");
+                this.headerEl.classList.add("dropdownmenu-header");
+                this.containerEl.appendChild(this.headerEl);
+            }
+            this.headerEl.textContent = text;
+        }
+        if(text == null && this.headerEl !== undefined) {
+            this.headerEl.remove();
+            delete this.headerEl;
         }
     }
 }
