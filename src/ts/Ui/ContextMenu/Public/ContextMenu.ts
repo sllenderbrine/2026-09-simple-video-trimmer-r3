@@ -1,6 +1,7 @@
 import { CtxmButton } from "./CtxmButton";
 import { CtxmDivider } from "./CtxmDivider";
 import { ContextMenuPrivate } from "../Private/ContextMenuPrivate";
+import { CtxmButtonPrivate } from "../Private/CtxmButtonPrivate";
 
 export * from "./_css";
 
@@ -145,10 +146,21 @@ export class ContextMenu {
         return k;
     }
 
-    public svgbutton(title: string, iconSrc: string, iconScale: number, keybind?: string | null, onclick?: () => void) {
+    public svgbutton(
+        title: string,
+        iconSrc: string,
+        iconScale: number,
+        keybind?: string | null,
+        onclick?: ((e: PointerEvent) => void) | null,
+        childMenuCreator?: ((k: ContextMenu) => void) | null,
+    ) {
         const btn = new CtxmButton(this);
         btn.setTitle(title);
         btn.setKeybind(keybind === undefined ? null : keybind);
         btn.setSvgIcon(iconSrc, iconScale);
+        if(onclick)
+            CtxmButtonPrivate.get(btn)!.interactEl.addEventListener("click", onclick);
+        // if(childMenuCreator)
+        //     btn.setChildCreator(childMenuCreator);
     }
 }

@@ -1,4 +1,4 @@
-import { EventOwner, IntervalEvent, MathUtility } from "../../../Utility";
+import { EventOwner, IntervalEvent, MathUtility, Signal } from "../../../Utility";
 import { ContextMenu, ContextMenuChild } from "../Public/ContextMenu";
 import { CtxmButton } from "../Public/CtxmButton";
 import { ContextMenuPrivate } from "./ContextMenuPrivate";
@@ -8,14 +8,7 @@ const TEXT_PADDING = 12;
 const privateMap = new WeakMap<CtxmButton, CtxmButtonPrivate>();
 
 export class CtxmButtonPrivate {
-    public containerEl: HTMLDivElement;
-    public interactEl: HTMLButtonElement;
     public menu: ContextMenu;
-    public titleContainerEl?: HTMLDivElement;
-    public titleEl?: HTMLDivElement;
-    public keybindEl?: HTMLDivElement;
-    public prefixIconEl?: HTMLDivElement;
-    public overflowReadUpdate?: IntervalEvent;
     public keybindWidth = 0;
     public targetWidth = 0;
     public prefixIconScale = 1;
@@ -24,7 +17,15 @@ export class CtxmButtonPrivate {
     public textOverflowFlip = false;
     public textOverflowScrub = false;
     public width = 0;
+    public overflowReadUpdate?: IntervalEvent;
+    public clickEvent = new Signal<[]>();
     public eventOwner = new EventOwner();
+    public containerEl: HTMLDivElement;
+    public interactEl: HTMLButtonElement;
+    public titleContainerEl?: HTMLDivElement;
+    public titleEl?: HTMLDivElement;
+    public keybindEl?: HTMLDivElement;
+    public prefixIconEl?: HTMLDivElement;
     constructor(obj: CtxmButton, menu: ContextMenu) {
         privateMap.set(obj, this);
         this.menu = menu;
@@ -64,11 +65,12 @@ export class CtxmButtonPrivate {
                             if(scrubX >= 0 && scrubX <= 1) {
                                 if(!scrub)
                                     scrubX3 = x;
-                                const r = (this.titleEl.offsetWidth - this.titleContainerEl!.offsetWidth);
-                                scrubX2 = MathUtility.clamp(-(scrubX * 1.4 - 0.2) * r, -r, 0);
+                                const cw = this.titleContainerEl!.offsetWidth;
+                                const ml = this.titleEl.offsetWidth - cw;
+                                scrubX2 = MathUtility.clamp(-(scrubX * 1.4 - 0.2) * ml, -ml, 0);
                                 scrubX3 = MathUtility.easeAnimation(scrubX3, scrubX2, dt * 15, dt * 60);
                                 scrub = true;
-                                this.titleEl.style.left = scrubX3 + "px";
+                                this.titleEl.style.left = MathUtility.clamp(scrubX3, -ml, 0) + "px";
                             } else {
                                 scrub = false;
                             }

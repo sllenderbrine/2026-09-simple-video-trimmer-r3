@@ -75,7 +75,6 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
         border-radius: 8px;
         width: 100cqw;
         height: 100cqh;
-        pointer-events: none;
         user-select: none;
         overflow: hidden;
     }
@@ -197,6 +196,16 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
         border-radius: 4px;
         top: 0px;
         z-index: 2;
+        opacity: 1;
+        transition: opacity 0.2s ease, filter 0.2s ease;
+    }
+
+    .dropdownmenu[data-scrollbar-visible="false"] .dropdownmenu-scrollbar {
+        opacity: 0.2;
+    }
+
+    .dropdownmenu-scrollbar:hover {
+        filter: brightness(1.5);
     }
 
     .dropdownmenu-buttoninteract {

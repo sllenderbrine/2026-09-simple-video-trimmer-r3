@@ -1,4 +1,4 @@
-import { MathUtility } from "../../../Utility";
+import { EventOwner, MathUtility, TimeoutEvent } from "../../../Utility";
 import { ContextMenu, ContextMenuChild } from "../Public/ContextMenu";
 import { CtxmButton } from "../Public/CtxmButton";
 import { CtxmDivider } from "../Public/CtxmDivider";
@@ -36,6 +36,8 @@ export class ContextMenuPrivate {
     public dodgedRightEdge = false;
     public dodgedBottomEdge = false;
     public hasScrollbar = false;
+    public scrollbarHidden = false;
+    public eventOwner = new EventOwner();
     public containerEl: HTMLDivElement;
     public backgroundContentEl: HTMLDivElement;
     public backgroundEl: HTMLDivElement;
@@ -53,6 +55,7 @@ export class ContextMenuPrivate {
     
         this.containerEl = document.createElement("div");
         this.containerEl.classList.add("dropdownmenu");
+        this.containerEl.setAttribute("data-scrollbar-visible", "false");
         document.body.appendChild(this.containerEl);
     
         this.backgroundContentEl = document.createElement("div");
@@ -85,6 +88,16 @@ export class ContextMenuPrivate {
 
         this.interactScrollEl.addEventListener("scroll", e => {
             this.updateContentScrollTop();
+        });
+
+        this.containerEl.addEventListener("mouseenter", e => {
+            this.scrollbarHidden = false;
+            this.containerEl.setAttribute("data-scrollbar-visible", "true");
+        });
+
+        this.containerEl.addEventListener("mouseleave", e => {
+            this.scrollbarHidden = true;
+            this.containerEl.setAttribute("data-scrollbar-visible", "false");
         });
     }
 
