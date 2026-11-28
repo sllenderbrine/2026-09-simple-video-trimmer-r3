@@ -79,8 +79,11 @@ export class CtxmButtonPrivate {
                             if(flip) {
                                 const cw = this.titleContainerEl!.offsetWidth;
                                 const ml = this.titleEl.offsetWidth - cw;
-                                x += ml * 4 * dt;
-                                if(x > 0) {
+                                if(x < -ml)
+                                    x += 60 * dt;
+                                else
+                                    x += ml * 4 * dt;
+                                if(x > 50) {
                                     x = 50;
                                     flip = !flip;
                                 }

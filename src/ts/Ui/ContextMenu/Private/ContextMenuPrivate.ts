@@ -179,11 +179,11 @@ export class ContextMenuPrivate {
         this.targetWidth = width;
         this.targetHeight = top;
         this.hasScrollbar = top > this.maxHeight;
-        this.width = MathUtility.clamp(width, this.minWidth, Math.min(this.maxWidth, window.innerWidth));
+        this.width = MathUtility.clamp(width, this.minWidth, Math.min(this.maxWidth, window.innerWidth - 12));
         this.containerEl.style.width = this.width + "px";
         this.contentEl.style.width = this.width + "px";
         this.interactEl.style.width = this.width + "px";
-        this.height = MathUtility.clamp(top, this.minHeight, Math.min(this.maxHeight, window.innerHeight));
+        this.height = MathUtility.clamp(top, this.minHeight, Math.min(this.maxHeight, window.innerHeight - 12));
         this.containerEl.style.height = this.height + "px";
         this.contentEl.style.height = this.targetHeight + "px";
         this.interactEl.style.height = this.targetHeight + "px";
@@ -262,19 +262,19 @@ export class ContextMenuPrivate {
     }
 
     public updateScreenPositionX() {
-        if(this.x + this.width > window.innerWidth) {
+        if(this.x + this.width > window.innerWidth - 6) {
             this.left = (this.x - this.width + this.offscreenOffsetX);
             this.dodgedRightEdge = true;
         } else {
             this.left = this.x;
             this.dodgedRightEdge = false;
         }
-        this.left = MathUtility.clamp(this.left, 0, window.innerWidth - this.width);
+        this.left = MathUtility.clamp(this.left, 6, window.innerWidth - this.width - 6);
         this.containerEl.style.left = this.left + "px";
     }
 
     public updateScreenPositionY() {
-        if(this.y + this.height > window.innerHeight) {
+        if(this.y + this.height > window.innerHeight - 6) {
             this.top = (this.y - this.height + this.offscreenOffsetY);
             this.dodgedBottomEdge = true;
         } else {
@@ -297,7 +297,7 @@ export class ContextMenuPrivate {
                 this.containerEl.setAttribute("data-header-position", "top");
             }
         }
-        this.top = MathUtility.clamp(this.top, 0, window.innerHeight - this.height);
+        this.top = MathUtility.clamp(this.top, 6, window.innerHeight - this.height - 6);
         this.containerEl.style.top = this.top + "px";
     }
 
