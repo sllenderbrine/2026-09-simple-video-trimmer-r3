@@ -262,7 +262,7 @@ export class ContextMenuPrivate {
     }
 
     public updateScreenPositionX() {
-        if(window.innerWidth > this.width * 1.5 && this.x + this.width > window.innerWidth) {
+        if(this.x + this.width > window.innerWidth) {
             this.left = (this.x - this.width + this.offscreenOffsetX);
             this.dodgedRightEdge = true;
         } else {
@@ -274,24 +274,27 @@ export class ContextMenuPrivate {
     }
 
     public updateScreenPositionY() {
-        if(window.innerHeight > this.height * 1.5 && this.y + this.height > window.innerHeight) {
+        if(this.y + this.height > window.innerHeight) {
             this.top = (this.y - this.height + this.offscreenOffsetY);
             this.dodgedBottomEdge = true;
         } else {
             this.top = this.y;
             this.dodgedBottomEdge = false;
         }
-        if(this.headerPosition === "top") {
+        let isTop = this.headerPosition === "top";
+        if(this.dodgedBottomEdge)
+            isTop = !isTop;
+        if(isTop) {
             if(this.top > 22) {
-                this.containerEl.setAttribute("data-header-position", this.dodgedBottomEdge ? "bottom" : "top");
+                this.containerEl.setAttribute("data-header-position", "top");
             } else {
-                this.containerEl.setAttribute("data-header-position", this.dodgedBottomEdge ? "top" : "bottom");
+                this.containerEl.setAttribute("data-header-position", "bottom");
             }
         } else {
             if(this.top + this.height < window.innerHeight - 22) {
-                this.containerEl.setAttribute("data-header-position", this.dodgedBottomEdge ? "top" : "bottom");
+                this.containerEl.setAttribute("data-header-position", "bottom");
             } else {
-                this.containerEl.setAttribute("data-header-position", this.dodgedBottomEdge ? "bottom" : "top");
+                this.containerEl.setAttribute("data-header-position", "top");
             }
         }
         this.top = MathUtility.clamp(this.top, 0, window.innerHeight - this.height);

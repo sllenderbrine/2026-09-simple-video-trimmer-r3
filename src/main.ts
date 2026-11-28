@@ -7,7 +7,7 @@ document.documentElement.dataset.theme = "dark-flat";
 
 ContextMenu.new(k => {
     k.setOffscreenOffset(0, 32);
-    k.setPosition(32, 32);
+    k.setPosition(200, 200);
     k.setHeader("File Explorer");
     k.setHeaderPosition("bottom");
     k.tdivider("Explorer");
