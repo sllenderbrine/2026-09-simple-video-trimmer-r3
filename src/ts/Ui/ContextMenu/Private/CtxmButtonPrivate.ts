@@ -49,16 +49,18 @@ export class CtxmButtonPrivate {
         let hoverX = 0;
         let scrubX2 = 0;
         let scrubX3 = 0;
+        let scrubFlip = false;
         this.interactEl.addEventListener("mouseenter", () => {
             if(this.overflowReadUpdate === undefined && this.textOverflow) {
                 const dt = 1 / 60;
                 x = 0;
+                scrubX3 = 0;
                 flip = false;
                 this.overflowReadUpdate = new IntervalEvent(() => {
                     if(this.titleEl !== undefined) {
                         if(this.textOverflow) {
                             titleRect = this.titleContainerEl!.getBoundingClientRect();
-                            scrubX = (hoverX - titleRect.left) / titleRect.width;
+                            scrubX = (scrubFlip ? titleRect.right - hoverX : hoverX - titleRect.left) / titleRect.width;
                             if(scrubX >= 0 && scrubX <= 1) {
                                 if(!scrub)
                                     scrubX3 = x;
