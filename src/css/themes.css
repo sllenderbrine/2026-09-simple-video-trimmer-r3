@@ -9,8 +9,8 @@
 
 :root[data-theme="dark"] {
     --bg0: rgb(15, 15, 16);
-    --bg1: rgb(26, 26, 28);
-    --bg2: rgb(79, 81, 85);
+    --bg1: rgb(27, 27, 28);
+    --bg2: rgb(83, 84, 86);
     --text: rgb(230, 233, 235);
     --text1: rgb(130, 138, 141);
     --text2: rgb(87, 92, 93);
@@ -18,8 +18,8 @@
 
 :root[data-theme="dark-flat"] {
     --bg0: rgb(15, 15, 16);
-    --bg1: rgb(26, 26, 28);
-    --bg2: rgb(79, 81, 85);
+    --bg1: rgb(26, 26, 27);
+    --bg2: rgb(83, 84, 86);
     --text: rgb(230, 233, 235);
     --text1: rgb(130, 138, 141);
     --text2: rgb(87, 92, 93);

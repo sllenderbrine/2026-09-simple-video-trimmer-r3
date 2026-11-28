@@ -6,18 +6,19 @@ document.body.oncontextmenu = e => e.preventDefault();
 document.documentElement.dataset.theme = "dark-flat";
 
 ContextMenu.new(k => {
+    k.tdivider("Explorer");
     k.svgbutton("Move Up Directory", "back", 0.9, "Ctrl + Up Arrow");
     k.svgbutton("Back", "undo", 0.9, "Ctrl + Left Arrow");
     k.svgbutton("Forward", "redo", 0.9, "Ctrl + Right Arrow");
-    k.divider();
+    k.tdivider("Cache");
     k.svgbutton("Refresh", "refresh", 0.8, "Ctrl + R");
     k.svgbutton("Hard Refresh", "hard-refresh", 0.8, "Ctrl + Shift + R");
-    k.divider();
+    k.tdivider();
     k.svgbutton("Import/Export Data", "save", 1.1, null);
     k.svgbutton("Settings", "settings", 0.9, "Ctrl + P");
-    k.divider();
+    k.tdivider();
     k.svgbutton("Exit", "cross", 0.85, null);
-    k.divider();
+    k.tdivider("Overflow Tests");
     for(let i=0; i<5; i++)
         k.svgbutton("This Is a Very Long Title - 12:00 AM to 11:59 PM - abcdefghijklmnopqrstuvwxyz", "check", 0.85, ["Ctrl + Alt + Shift + Backspace", "Ctrl + E"][i]);
 });

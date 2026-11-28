@@ -146,6 +146,12 @@ export class ContextMenu {
         return k;
     }
 
+    public tdivider(title: string) {
+        const div = new CtxmDivider(this);
+        div.setTitle(title);
+        return div;
+    }
+
     public svgbutton(
         title: string,
         iconSrc: string,

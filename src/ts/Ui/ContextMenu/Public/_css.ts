@@ -56,7 +56,7 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
             background-color: var(--bg1);
         }
         .dropdownmenu-prefixicon {
-            background-color: rgb(34, 36, 36);
+            background-color: rgb(32, 32, 33);
             color: rgb(97, 100, 101);
         }
     }
@@ -126,6 +126,23 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
         width: 100%;
         height: 0.8px;
         background-color: var(--bg2);
+        opacity: 0.5;
+    }
+
+    .dropdownmenu-dividertitle {
+        position: absolute;
+        width: fit-content;
+        height: 16px;
+        align-content: center;
+        font-size: 10px;
+        color: var(--bg2);
+    }
+
+    .dropdownmenu-dividerright {
+        position: absolute;
+        height: 0.8px;
+        background-color: var(--bg2);
+        opacity: 0.5;
     }
 
     .dropdownmenu-button {

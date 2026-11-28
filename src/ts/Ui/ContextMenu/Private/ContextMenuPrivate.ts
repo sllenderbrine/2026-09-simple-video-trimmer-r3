@@ -151,8 +151,8 @@ export class ContextMenuPrivate {
                 priv.setTop(top);
                 top += 24;
             } else if(child.constructor === CtxmDivider) {
-                priv.setTop(top + 4);
-                top += 9;
+                priv.setTop(priv.titleEl === undefined ? top + 4 : top + 6);
+                top += (priv.titleEl === undefined ? 8 : 12) + 1;
             }
         }
         width = width - widthKw + maxKw;
