@@ -53,6 +53,7 @@ export class ContextMenuPrivate {
     public scrollbarEl?: HTMLDivElement;
     public scrollbarInteractEl?: HTMLDivElement;
     public headerEl?: HTMLDivElement;
+    public visualEl: HTMLDivElement;
     constructor(
         obj: ContextMenu,
     ) {
@@ -60,39 +61,43 @@ export class ContextMenuPrivate {
         this.public = obj;
     
         this.containerEl = document.createElement("div");
-        this.containerEl.classList.add("dropdownmenu");
+        this.containerEl.classList.add("contextmenu");
         this.containerEl.setAttribute("data-scrollbar-visible", "false");
         this.containerEl.setAttribute("data-scrollbar-hover", "false");
         this.containerEl.setAttribute("data-header-position", "bottom");
         document.body.appendChild(this.containerEl);
     
+        this.visualEl = document.createElement("div");
+        this.visualEl.classList.add("contextmenu-visual");
+        this.containerEl.appendChild(this.visualEl);
+    
         this.backgroundContainerEl = document.createElement("div");
-        this.backgroundContainerEl.classList.add("dropdownmenu-backgroundcontainer");
-        this.containerEl.appendChild(this.backgroundContainerEl);
+        this.backgroundContainerEl.classList.add("contextmenu-backgroundcontainer");
+        this.visualEl.appendChild(this.backgroundContainerEl);
     
         this.backgroundEl = document.createElement("div");
-        this.backgroundEl.classList.add("dropdownmenu-background");
+        this.backgroundEl.classList.add("contextmenu-background");
         this.backgroundContainerEl.appendChild(this.backgroundEl);
 
         this.contentScrollEl = document.createElement("div");
-        this.contentScrollEl.classList.add("dropdownmenu-contentscroll");
-        this.containerEl.appendChild(this.contentScrollEl);
+        this.contentScrollEl.classList.add("contextmenu-contentscroll");
+        this.visualEl.appendChild(this.contentScrollEl);
 
         this.contentEl = document.createElement("div");
-        this.contentEl.classList.add("dropdownmenu-content");
+        this.contentEl.classList.add("contextmenu-content");
         this.contentScrollEl.appendChild(this.contentEl);
 
         this.interactScrollEl = document.createElement("div");
-        this.interactScrollEl.classList.add("dropdownmenu-interactscroll");
+        this.interactScrollEl.classList.add("contextmenu-interactscroll");
         this.containerEl.appendChild(this.interactScrollEl);
 
         this.interactEl = document.createElement("div");
-        this.interactEl.classList.add("dropdownmenu-interact");
+        this.interactEl.classList.add("contextmenu-interact");
         this.interactScrollEl.appendChild(this.interactEl);
     
         this.overlayEl = document.createElement("div");
-        this.overlayEl.classList.add("dropdownmenu-overlay");
-        this.containerEl.appendChild(this.overlayEl);
+        this.overlayEl.classList.add("contextmenu-overlay");
+        this.visualEl.appendChild(this.overlayEl);
 
         this.interactScrollEl.addEventListener("wheel", e => {
             if(this.scrollbarScrub)
@@ -112,6 +117,8 @@ export class ContextMenuPrivate {
             this.scrollbarHidden = true;
             this.containerEl.setAttribute("data-scrollbar-visible", "false");
         });
+
+        this.animateOpen();
     }
 
     public static get(obj: ContextMenu) {
@@ -120,17 +127,17 @@ export class ContextMenuPrivate {
 
     public updateContentScrollTop() {
         this.contentScrollEl.scrollTop = this.interactScrollEl.scrollTop;
-        if(this.scrollbarEl !== undefined) {
-            const t = (this.contentEl.offsetHeight - this.contentScrollEl.offsetHeight);
-            let sh = this.contentScrollEl.offsetHeight - 12;
+        if(this.scrollbarInteractEl !== undefined) {
+            const t = (this.interactEl.offsetHeight - this.interactScrollEl.offsetHeight);
+            let sh = this.interactScrollEl.offsetHeight - 12;
             sh -= 0.5 * Math.min(t, 200);
             sh -= 0.05 * Math.max(t - 200, 0);
             sh = Math.max(sh, 24);
-            this.scrollbarEl.style.height = sh + "px";
+            this.scrollbarEl!.style.height = sh + "px";
             this.scrollbarInteractEl!.style.height = sh + "px";
-            let th = this.contentScrollEl.offsetHeight - this.scrollbarEl.offsetHeight - 13;
-            this.scrollbarEl.style.top = (6 + this.contentScrollEl.scrollTop / t * th) + "px";
-            this.scrollbarInteractEl!.style.top = (6 + this.contentScrollEl.scrollTop / t * th + this.interactScrollEl.scrollTop) + "px";
+            let th = this.interactScrollEl.offsetHeight - this.scrollbarInteractEl.offsetHeight - 13;
+            this.scrollbarEl!.style.top = (6 + this.interactScrollEl.scrollTop / t * th) + "px";
+            this.scrollbarInteractEl!.style.top = (6 + this.interactScrollEl.scrollTop / t * th + this.interactScrollEl.scrollTop) + "px";
         }
     }
 
@@ -186,14 +193,14 @@ export class ContextMenuPrivate {
         if(this.hasScrollbar) {
             if(this.scrollbarEl === undefined) {
                 this.scrollbarEl = document.createElement("div");
-                this.scrollbarEl.classList.add("dropdownmenu-scrollbar");
+                this.scrollbarEl.classList.add("contextmenu-scrollbar");
                 this.backgroundContainerEl.appendChild(this.scrollbarEl);
                 
                 this.scrollbarInteractEl = document.createElement("div");
-                this.scrollbarInteractEl.classList.add("dropdownmenu-scrollbarinteract");
+                this.scrollbarInteractEl.classList.add("contextmenu-scrollbarinteract");
                 this.interactScrollEl.appendChild(this.scrollbarInteractEl);
 
-                let scrollbar = this.scrollbarEl;
+                let scrollbarInteract = this.scrollbarInteractEl;
 
                 let evs = new EventOwner();
                 let mdY = 0;
@@ -205,7 +212,7 @@ export class ContextMenuPrivate {
                     mdT = this.interactScrollEl.scrollTop;
                     new HtmlListener(window, "mousemove", e => {
                         let dY = e.clientY - mdY;
-                        let sbarH = scrollbar.offsetHeight;
+                        let sbarH = scrollbarInteract.offsetHeight;
                         let outerH = this.interactScrollEl.offsetHeight;
                         let innerH = this.interactEl.offsetHeight;
                         let dSy = dY / (outerH - sbarH - 13) * (innerH - outerH);
@@ -276,8 +283,8 @@ export class ContextMenuPrivate {
         if(text != null) {
             if(this.headerEl === undefined) {
                 this.headerEl = document.createElement("div");
-                this.headerEl.classList.add("dropdownmenu-header");
-                this.containerEl.appendChild(this.headerEl);
+                this.headerEl.classList.add("contextmenu-header");
+                this.visualEl.appendChild(this.headerEl);
             }
             this.headerEl.textContent = text;
         }
@@ -285,5 +292,25 @@ export class ContextMenuPrivate {
             this.headerEl.remove();
             delete this.headerEl;
         }
+    }
+
+    public animateOpen() {
+        const dur = 200;
+        this.visualEl.animate([
+            { scale: "0.5", translate: "-20% -20%", opacity: "0", height: "0cqh" },
+            { scale: "1", translate: "0% 0%", opacity: "1", height: "100cqh" },
+        ], { duration: dur, easing: "ease" });
+        this.contentScrollEl.animate([
+            { height: "0cqh" },
+            { height: "100cqh" },
+        ], { duration: dur, easing: "ease" });
+        this.backgroundContainerEl.animate([
+            { height: "0cqh" },
+            { height: "100cqh" },
+        ], { duration: dur, easing: "ease" });
+        this.interactScrollEl.animate([
+            { opacity: "0" },
+            { opacity: "0" },
+        ], { duration: dur, easing: "ease" });
     }
 }

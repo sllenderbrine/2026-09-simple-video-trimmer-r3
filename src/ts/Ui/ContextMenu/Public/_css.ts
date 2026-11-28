@@ -2,7 +2,7 @@ import { CssUtility } from "../../../Utility";
 
 export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
     :root[data-theme="red"] {
-        .dropdownmenu-background {
+        .contextmenu-background {
             --stripe1: rgb(42, 4, 18);
             --stripe2: rgb(34, 5, 14);
             background-image: repeating-linear-gradient(
@@ -23,54 +23,55 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
             filter: blur(8px);
             background-color: rgb(36, 7, 15);
         }
-        // .dropdownmenu-overlay {
+        // .contextmenu-overlay {
         //     box-shadow: 2px 0px 0px 1px rgba(255, 190, 190, 0.01) inset,
         //         -2px 0px 0px 1px rgba(0, 0, 0, 0.44) inset,
         //         0px 1px 0px 1px rgba(227, 147, 147, 0.2) inset,
         //         0px -1.5px 0px 1px rgba(0, 0, 0, 0.2) inset;
         // }
-        .dropdownmenu-prefixicon {
+        .contextmenu-prefixicon {
             background-color: rgba(91, 41, 39, 0.5);
             color: rgba(222, 161, 161, 0.53);
         }
     }
         
     :root[data-theme="dark"] {
-        .dropdownmenu-background {
+        .contextmenu-background {
             background-color: var(--bg1);
         }
-        .dropdownmenu-overlay {
+        .contextmenu-overlay {
             box-shadow: 2px 0px 0px 1px rgb(35, 35, 35) inset,
                 -2px 0px 0px 1px rgb(32, 32, 32) inset,
                 0px 1px 0px 1px rgb(97, 97, 97) inset,
                 0px -1.5px 0px 1px rgb(24, 24, 24) inset;
         }
-        .dropdownmenu-prefixicon {
+        .contextmenu-prefixicon {
             background-color: rgb(34, 36, 36);
             color: rgb(97, 100, 101);
         }
     }
         
     :root[data-theme="dark-flat"] {
-        .dropdownmenu-background {
+        .contextmenu-background {
             background-color: var(--bg1);
         }
-        .dropdownmenu-prefixicon {
+        .contextmenu-prefixicon {
             background-color: rgb(32, 32, 33);
             color: rgb(97, 100, 101);
         }
     }
 
-    .dropdownmenu {
+    .contextmenu {
         container-type: size;
         position: absolute;
         user-select: none;
         --border-radius: 4px;
         border-radius: var(--border-radius);
         z-index: 20;
+        filter: drop-shadow(0px 0px 12px rgba(0, 0, 0, 0.25));
     }
 
-    .dropdownmenu-backgroundcontainer {
+    .contextmenu-backgroundcontainer {
         position: absolute;
         border-radius: var(--border-radius);
         width: 100cqw;
@@ -79,7 +80,7 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
         overflow: hidden;
     }
 
-    .dropdownmenu-background {
+    .contextmenu-background {
         position: absolute;
         border-radius: var(--border-radius);
         width: 100cqw;
@@ -88,7 +89,7 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
         user-select: none;
     }
 
-    .dropdownmenu-overlay {
+    .contextmenu-overlay {
         position: absolute;
         border-radius: var(--border-radius);
         width: 100cqw;
@@ -97,7 +98,15 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
         user-select: none;
     }
 
-    .dropdownmenu-interactscroll {
+    .contextmenu-visual {
+        position: absolute;
+        width: 100cqw;
+        height: 100cqh;
+        pointer-events: none;
+        user-select: none;
+    }
+
+    .contextmenu-interactscroll {
         position: absolute;
         width: 100cqw;
         height: 100cqh;
@@ -106,22 +115,22 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
         scrollbar-width: none;
     }
 
-    .dropdownmenu-interact {
+    .contextmenu-interact {
         position: absolute;
     }
 
-    .dropdownmenu-contentscroll {
+    .contextmenu-contentscroll {
         position: absolute;
         width: 100cqw;
         height: 100cqh;
         overflow: hidden;
     }
 
-    .dropdownmenu-content {
+    .contextmenu-content {
         position: absolute;
     }
 
-    .dropdownmenu-divider {
+    .contextmenu-divider {
         position: absolute;
         width: 100%;
         height: 0.8px;
@@ -129,7 +138,7 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
         opacity: 0.5;
     }
 
-    .dropdownmenu-dividertitle {
+    .contextmenu-dividertitle {
         position: absolute;
         width: fit-content;
         height: 16px;
@@ -138,20 +147,20 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
         color: var(--bg2);
     }
 
-    .dropdownmenu-dividerright {
+    .contextmenu-dividerright {
         position: absolute;
         height: 0.8px;
         background-color: var(--bg2);
         opacity: 0.5;
     }
 
-    .dropdownmenu-button {
+    .contextmenu-button {
         position: absolute;
         width: 100%;
         height: 24px;
     }
 
-    .dropdownmenu-titlecontainer {
+    .contextmenu-titlecontainer {
         height: 24px;
         left: 0px;
         top: 0px;
@@ -161,7 +170,7 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
         pointer-events: none;
     }
 
-    .dropdownmenu-title {
+    .contextmenu-title {
         width: fit-content;
         height: 100%;
         left: 0px;
@@ -175,7 +184,7 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
         color: var(--text1);
     }
 
-    .dropdownmenu-keybind {
+    .contextmenu-keybind {
         height: 24px;
         left: 0px;
         top: 0px;
@@ -189,7 +198,7 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
         color: var(--text2);
     }
 
-    .dropdownmenu-prefixicon {
+    .contextmenu-prefixicon {
         position: absolute;
         width: 28px;
         height: 24px;
@@ -204,7 +213,7 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
         }
     }
 
-    .dropdownmenu-scrollbar {
+    .contextmenu-scrollbar {
         position: absolute;
         background-color: rgba(255, 255, 255, 1);
         width: 4px;
@@ -218,15 +227,15 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
         user-select: none;
     }
 
-    .dropdownmenu[data-scrollbar-visible="false"][data-scrollbar-hover="false"] .dropdownmenu-scrollbar {
+    .contextmenu[data-scrollbar-visible="false"][data-scrollbar-hover="false"] .contextmenu-scrollbar {
         opacity: 0.05;
     }
 
-    .dropdownmenu[data-scrollbar-hover="true"] .dropdownmenu-scrollbar {
+    .contextmenu[data-scrollbar-hover="true"] .contextmenu-scrollbar {
         opacity: 0.6;
     }
 
-    .dropdownmenu-scrollbarinteract {
+    .contextmenu-scrollbarinteract {
         position: absolute;
         width: 13px;
         height: 50%;
@@ -237,7 +246,7 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
         cursor: pointer;
     }
 
-    .dropdownmenu-buttoninteract {
+    .contextmenu-buttoninteract {
         position: absolute;
         height: 24px;
         padding: 0;
@@ -248,13 +257,13 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
         transition: background-color 0.05s ease;
     }
 
-    .dropdownmenu-buttoninteract:hover {
+    .contextmenu-buttoninteract:hover {
         background-color: rgba(255, 255, 255, 0.05);
         outline: 1px solid rgba(255, 255, 255, 0.2);
         box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
     }
 
-    .dropdownmenu-header {
+    .contextmenu-header {
         position: absolute;
         width: fit-content;
         height: 16px;
@@ -267,13 +276,13 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
         z-index: -1;
     }
 
-    .dropdownmenu[data-header-position="top"] .dropdownmenu-header {
+    .contextmenu[data-header-position="top"] .contextmenu-header {
         top: -16px;
         border-top-left-radius: 4px;
         border-top-right-radius: 4px;
     }
 
-    .dropdownmenu[data-header-position="bottom"] .dropdownmenu-header {
+    .contextmenu[data-header-position="bottom"] .contextmenu-header {
         bottom: -16px;
         border-bottom-left-radius: 4px;
         border-bottom-right-radius: 4px;

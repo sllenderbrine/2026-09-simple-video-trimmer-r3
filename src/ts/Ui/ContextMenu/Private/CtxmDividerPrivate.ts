@@ -17,7 +17,7 @@ export class CtxmDividerPrivate {
         this.menu = menu;
 
         this.containerEl = document.createElement("div");
-        this.containerEl.classList.add("dropdownmenu-divider");
+        this.containerEl.classList.add("contextmenu-divider");
         
         const menuPrivate = ContextMenuPrivate.get(menu)!;
         menuPrivate.contentEl.appendChild(this.containerEl);
@@ -56,11 +56,11 @@ export class CtxmDividerPrivate {
                 const menuPrivate = ContextMenuPrivate.get(this.menu)!;
 
                 this.titleEl = document.createElement("div");
-                this.titleEl.classList.add("dropdownmenu-dividertitle");
+                this.titleEl.classList.add("contextmenu-dividertitle");
                 menuPrivate.contentEl.appendChild(this.titleEl);
 
                 this.rightEl = document.createElement("div");
-                this.rightEl.classList.add("dropdownmenu-dividerright");
+                this.rightEl.classList.add("contextmenu-dividerright");
                 menuPrivate.contentEl.appendChild(this.rightEl);
             }
             this.titleEl.textContent = text;

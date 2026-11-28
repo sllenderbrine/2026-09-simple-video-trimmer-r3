@@ -31,10 +31,10 @@ export class CtxmButtonPrivate {
         this.menu = menu;
 
         this.containerEl = document.createElement("div");
-        this.containerEl.classList.add("dropdownmenu-button");
+        this.containerEl.classList.add("contextmenu-button");
 
         this.interactEl = document.createElement("button");
-        this.interactEl.classList.add("dropdownmenu-buttoninteract");
+        this.interactEl.classList.add("contextmenu-buttoninteract");
 
         const menuPrivate = ContextMenuPrivate.get(menu)!;
         menuPrivate.contentEl.appendChild(this.containerEl);
@@ -183,11 +183,11 @@ export class CtxmButtonPrivate {
         } else {
             if(this.titleEl === undefined) {
                 this.titleContainerEl = document.createElement("div");
-                this.titleContainerEl.classList.add("dropdownmenu-titlecontainer");
+                this.titleContainerEl.classList.add("contextmenu-titlecontainer");
                 this.containerEl.appendChild(this.titleContainerEl);
 
                 this.titleEl = document.createElement("div");
-                this.titleEl.classList.add("dropdownmenu-title");
+                this.titleEl.classList.add("contextmenu-title");
                 this.titleContainerEl.appendChild(this.titleEl);
             }
             this.titleEl.textContent = text;
@@ -204,7 +204,7 @@ export class CtxmButtonPrivate {
         } else {
             if(this.keybindEl === undefined) {
                 this.keybindEl = document.createElement("div");
-                this.keybindEl.classList.add("dropdownmenu-keybind");
+                this.keybindEl.classList.add("contextmenu-keybind");
                 this.containerEl.appendChild(this.keybindEl);
             }
             this.keybindEl.textContent = text;
@@ -221,7 +221,7 @@ export class CtxmButtonPrivate {
             let icon = this.prefixIconEl;
             if(icon === undefined) {
                 icon = document.createElement("div");
-                icon.classList.add("dropdownmenu-prefixicon");
+                icon.classList.add("contextmenu-prefixicon");
                 this.containerEl.appendChild(icon);
                 this.prefixIconEl = icon;
             }
