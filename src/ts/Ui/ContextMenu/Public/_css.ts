@@ -133,18 +133,27 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
         position: absolute;
         width: 100%;
         height: 24px;
-        display: flex;
+    }
+
+    .dropdownmenu-titlecontainer {
+        height: 24px;
+        left: 0px;
+        top: 0px;
+        position: absolute;
+        overflow: hidden;
+        user-select: none;
+        pointer-events: none;
     }
 
     .dropdownmenu-title {
-        height: 24px;
+        width: fit-content;
+        height: 100%;
         left: 0px;
         top: 0px;
         position: absolute;
         align-content: center;
         text-align: left;
         white-space: nowrap;
-        overflow: hidden;
         user-select: none;
         pointer-events: none;
         color: var(--text1);
@@ -168,7 +177,6 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
         position: absolute;
         width: 28px;
         height: 24px;
-        flex: 0 0 auto;
         user-select: none;
         pointer-events: none;
         text-align: center;
@@ -188,5 +196,23 @@ export const CONTEXTMENU_STYLE = CssUtility.adoptStyle(`
         right: 6px;
         border-radius: 4px;
         top: 0px;
+        z-index: 2;
+    }
+
+    .dropdownmenu-buttoninteract {
+        position: absolute;
+        height: 24px;
+        padding: 0;
+        border: none;
+        outline: none;
+        background-color: transparent;
+        cursor: pointer;
+        transition: background-color 0.05s ease;
+    }
+
+    .dropdownmenu-buttoninteract:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+        outline: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
     }
 `);

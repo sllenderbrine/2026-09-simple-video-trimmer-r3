@@ -19,7 +19,7 @@ ContextMenu.new(k => {
     k.svgbutton("Exit", "cross", 0.85, null);
     k.divider();
     for(let i=0; i<10; i++)
-        k.svgbutton("This Is a Very Long Title - 12:00 AM to 11:59 PM - abcdefghijklmnopqrstuvwxyz", "check", 0.85, "Ctrl + Alt + Shift + Backspace");
+        k.svgbutton("This Is a Very Long Title - 12:00 AM to 11:59 PM - abcdefghijklmnopqrstuvwxyz", "check", 0.85, i < 5 ? "Ctrl + Alt + Shift + Backspace" : "Ctrl + E");
 });
 
 // let menu = new ContextMenu();
