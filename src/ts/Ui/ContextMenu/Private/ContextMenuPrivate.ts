@@ -37,6 +37,7 @@ export class ContextMenuPrivate {
     public dodgedBottomEdge = false;
     public hasScrollbar = false;
     public scrollbarHidden = false;
+    public scrollbarScrub = false;
     public eventOwner = new EventOwner();
     public scrollbarEvents = new EventOwner();
     public containerEl: HTMLDivElement;
@@ -86,6 +87,11 @@ export class ContextMenuPrivate {
         this.overlayEl = document.createElement("div");
         this.overlayEl.classList.add("dropdownmenu-overlay");
         this.containerEl.appendChild(this.overlayEl);
+
+        this.interactScrollEl.addEventListener("wheel", e => {
+            if(this.scrollbarScrub)
+                e.preventDefault();
+        });
 
         this.interactScrollEl.addEventListener("scroll", () => {
             this.updateContentScrollTop();
@@ -179,9 +185,9 @@ export class ContextMenuPrivate {
                 let mdY = 0;
                 let mdT = 0;
                 new HtmlListener(this.scrollbarEl, "mousedown", e => {
+                    this.scrollbarScrub = true;
                     mdY = e.clientY;
                     mdT = this.interactScrollEl.scrollTop;
-                    evs.cancelEventConnections();
                     new HtmlListener(window, "mousemove", e => {
                         let dY = e.clientY - mdY;
                         let sbarH = scrollbar.offsetHeight;
@@ -194,6 +200,7 @@ export class ContextMenuPrivate {
                         })
                     }, this.scrollbarEvents, this.eventOwner, evs);
                     new HtmlListener(window, "mouseup", () => {
+                        this.scrollbarScrub = false;
                         evs.cancelEventConnections();
                     }, this.scrollbarEvents, this.eventOwner, evs);
                 }, this.scrollbarEvents, this.eventOwner);
@@ -203,6 +210,7 @@ export class ContextMenuPrivate {
                 this.scrollbarEl.remove();
                 delete this.scrollbarEl;
                 this.scrollbarEvents.cancelEventConnections();
+                this.scrollbarScrub = false;
             }
         }
         this.updateContentScrollTop();
