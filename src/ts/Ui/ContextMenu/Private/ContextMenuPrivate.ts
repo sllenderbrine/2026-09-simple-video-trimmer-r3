@@ -40,6 +40,7 @@ export class ContextMenuPrivate {
     public hasScrollbar = false;
     public scrollbarHidden = false;
     public scrollbarScrub = false;
+    public headerPosition = "top";
     public eventOwner = new EventOwner();
     public scrollbarEvents = new EventOwner();
     public containerEl: HTMLDivElement;
@@ -118,6 +119,10 @@ export class ContextMenuPrivate {
             this.containerEl.setAttribute("data-scrollbar-visible", "false");
         });
 
+        new HtmlListener(window, "resize", () => {
+            this.updateLayout();
+        }, this.eventOwner);
+
         this.animateOpen();
     }
 
@@ -174,11 +179,11 @@ export class ContextMenuPrivate {
         this.targetWidth = width;
         this.targetHeight = top;
         this.hasScrollbar = top > this.maxHeight;
-        this.width = MathUtility.clamp(width, this.minWidth, this.maxWidth);
+        this.width = MathUtility.clamp(width, this.minWidth, Math.min(this.maxWidth, window.innerWidth));
         this.containerEl.style.width = this.width + "px";
         this.contentEl.style.width = this.width + "px";
         this.interactEl.style.width = this.width + "px";
-        this.height = MathUtility.clamp(top, this.minHeight, this.maxHeight);
+        this.height = MathUtility.clamp(top, this.minHeight, Math.min(this.maxHeight, window.innerHeight));
         this.containerEl.style.height = this.height + "px";
         this.contentEl.style.height = this.targetHeight + "px";
         this.interactEl.style.height = this.targetHeight + "px";
@@ -248,35 +253,49 @@ export class ContextMenuPrivate {
             }
         }
         this.updateContentScrollTop();
+        this.updateScreenPosition();
+    }
+
+    public updateScreenPosition() {
+        this.updateScreenPositionX();
+        this.updateScreenPositionY();
     }
 
     public updateScreenPositionX() {
-        if(this.x + this.width > window.innerWidth) {
+        if(window.innerWidth > this.width * 1.5 && this.x + this.width > window.innerWidth) {
             this.left = (this.x - this.width + this.offscreenOffsetX);
-            this.containerEl.style.left = this.left + "px";
             this.dodgedRightEdge = true;
         } else {
             this.left = this.x;
-            this.containerEl.style.left = this.left + "px";
             this.dodgedRightEdge = false;
         }
+        this.left = MathUtility.clamp(this.left, 0, window.innerWidth - this.width);
+        this.containerEl.style.left = this.left + "px";
     }
 
     public updateScreenPositionY() {
-        if(this.y + this.height > window.innerHeight) {
+        if(window.innerHeight > this.height * 1.5 && this.y + this.height > window.innerHeight) {
             this.top = (this.y - this.height + this.offscreenOffsetY);
-            this.containerEl.style.top = this.top + "px";
             this.dodgedBottomEdge = true;
         } else {
             this.top = this.y;
-            this.containerEl.style.top = this.top + "px";
             this.dodgedBottomEdge = false;
         }
-        if(this.top > 22) {
-            this.containerEl.setAttribute("data-header-position", "top");
+        if(this.headerPosition === "top") {
+            if(this.top > 22) {
+                this.containerEl.setAttribute("data-header-position", this.dodgedBottomEdge ? "bottom" : "top");
+            } else {
+                this.containerEl.setAttribute("data-header-position", this.dodgedBottomEdge ? "top" : "bottom");
+            }
         } else {
-            this.containerEl.setAttribute("data-header-position", "bottom");
+            if(this.top + this.height < window.innerHeight - 22) {
+                this.containerEl.setAttribute("data-header-position", this.dodgedBottomEdge ? "top" : "bottom");
+            } else {
+                this.containerEl.setAttribute("data-header-position", this.dodgedBottomEdge ? "bottom" : "top");
+            }
         }
+        this.top = MathUtility.clamp(this.top, 0, window.innerHeight - this.height);
+        this.containerEl.style.top = this.top + "px";
     }
 
     public setHeader(text?: string | null) {
@@ -292,6 +311,10 @@ export class ContextMenuPrivate {
             this.headerEl.remove();
             delete this.headerEl;
         }
+    }
+
+    public setHeaderPosition(pos: "top" | "bottom") {
+        this.headerPosition = pos;
     }
 
     public animateOpen() {

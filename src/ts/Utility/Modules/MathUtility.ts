@@ -3,7 +3,7 @@ export namespace MathUtility {
     //// B*
     //// C*
     export function clamp(x: number, a: number, b: number): number {
-        return Math.min(Math.max(x, a), b);
+        return Math.max(Math.min(x, b), a);
     }
     /**
      * @example

@@ -177,7 +177,17 @@ export class ContextMenu {
     public setPosition(x: number, y: number) {
         this._private.x = x;
         this._private.y = y;
-        this._private.updateScreenPositionX();
+        this._private.updateScreenPosition();
+    }
+
+    public setHeaderPosition(pos: "top" | "bottom") {
+        this._private.setHeaderPosition(pos);
         this._private.updateScreenPositionY();
+    }
+
+    public setOffscreenOffset(x: number, y: number) {
+        this._private.offscreenOffsetX = x;
+        this._private.offscreenOffsetY = y;
+        this._private.updateScreenPosition();
     }
 }
