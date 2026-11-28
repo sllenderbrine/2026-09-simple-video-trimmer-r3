@@ -60,6 +60,8 @@ export class CtxmButtonPrivate {
                             titleRect = this.titleContainerEl!.getBoundingClientRect();
                             scrubX = (hoverX - titleRect.left) / titleRect.width;
                             if(scrubX >= 0 && scrubX <= 1) {
+                                if(!scrub)
+                                    scrubX3 = x;
                                 const r = (this.titleEl.offsetWidth - this.titleContainerEl!.offsetWidth);
                                 scrubX2 = MathUtility.clamp(-(scrubX * 1.4 - 0.2) * r, -r, 0);
                                 scrubX3 = MathUtility.easeAnimation(scrubX3, scrubX2, dt * 15, dt * 60);
