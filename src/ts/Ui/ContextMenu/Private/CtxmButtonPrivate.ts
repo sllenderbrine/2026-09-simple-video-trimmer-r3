@@ -81,7 +81,7 @@ export class CtxmButtonPrivate {
                                 const ml = this.titleEl.offsetWidth - cw;
                                 x += ml * 4 * dt;
                                 if(x > 0) {
-                                    x = cw * 0.25;
+                                    x = 50;
                                     flip = !flip;
                                 }
                                 this.titleEl.style.left = MathUtility.clamp(x, -ml, 0) + "px";
@@ -89,8 +89,8 @@ export class CtxmButtonPrivate {
                                 const cw = this.titleContainerEl!.offsetWidth;
                                 const ml = this.titleEl.offsetWidth - cw;
                                 x -= 60 * dt;
-                                if(x < -ml - cw * 0.25) {
-                                    x = -ml - cw * 0.25;
+                                if(x < -ml - 50) {
+                                    x = -ml - 50;
                                     flip = !flip;
                                 }
                                 this.titleEl.style.left = MathUtility.clamp(x, -ml, 0) + "px";
