@@ -151,6 +151,9 @@ export class CtxmButtonPrivate {
             right += this.keybindWidth + TEXT_PADDING * 2;
             this.keybindEl.style.left = (width - right + TEXT_PADDING) + "px";
         }
+        if(this.keybindEl === undefined) {
+            right += 12;
+        }
         if(this.titleEl !== undefined) {
             left += TEXT_PADDING;
             this.titleContainerEl!.style.left = left + "px";
