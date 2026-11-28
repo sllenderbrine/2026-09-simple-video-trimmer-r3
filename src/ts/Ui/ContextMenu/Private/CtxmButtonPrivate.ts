@@ -49,7 +49,7 @@ export class CtxmButtonPrivate {
         let hoverX = 0;
         let scrubX2 = 0;
         let scrubX3 = 0;
-        this.interactEl.addEventListener("mouseenter", e => {
+        this.interactEl.addEventListener("mouseenter", () => {
             if(this.overflowReadUpdate === undefined && this.textOverflow) {
                 const dt = 1 / 60;
                 x = 0;
@@ -97,7 +97,7 @@ export class CtxmButtonPrivate {
             }
         });
 
-        this.interactEl.addEventListener("mouseleave", e => {
+        this.interactEl.addEventListener("mouseleave", () => {
             if(this.overflowReadUpdate !== undefined) {
                 this.overflowReadUpdate.disconnect();
                 delete this.overflowReadUpdate;
