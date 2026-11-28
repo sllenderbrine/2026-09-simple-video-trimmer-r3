@@ -34,7 +34,7 @@ export class GroupedSignalConnectionPrivate<M extends Record<string, any[]>, K e
                 EventOwnerPrivate.get(v)!.resources.add(obj);
             } else {
                 if(i !== 0)
-                    throw new Error("GroupedSignalConnectionSettings must be the first argument.");
+                    throw new Error(`GroupedSignalConnectionSettings cannot be the #${i+1} argument.`);
                 if(v.owners) {
                     for(const v2 of v.owners) {
                         this.owners.add(v2);

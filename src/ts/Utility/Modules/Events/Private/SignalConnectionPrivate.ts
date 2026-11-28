@@ -28,7 +28,7 @@ export class SignalConnectionPrivate<T extends any[]> {
                 EventOwnerPrivate.get(v)!.resources.add(obj);
             } else {
                 if(i !== 0)
-                    throw new Error("SignalConnectionSettings must be the first argument.");
+                    throw new Error(`SignalConnectionSettings cannot be the #${i+1} argument.`);
                 if(v.owners) {
                     for(const v2 of v.owners) {
                         this.owners.add(v2);

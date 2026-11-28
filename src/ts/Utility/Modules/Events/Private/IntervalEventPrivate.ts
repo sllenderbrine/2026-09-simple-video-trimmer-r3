@@ -24,7 +24,7 @@ export class IntervalEventPrivate {
                 EventOwnerPrivate.get(v)!.resources.add(obj);
             } else {
                 if(i !== 0)
-                    throw new Error("IntervalEventSettings must be the first argument.");
+                    throw new Error(`IntervalEventSettings cannot be the #${i+1} argument.`);
                 if(v.owners) {
                     for(const v2 of v.owners) {
                         this.owners.add(v2);

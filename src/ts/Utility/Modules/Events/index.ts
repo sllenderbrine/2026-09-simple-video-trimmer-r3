@@ -1,6 +1,7 @@
 export * from "./Public/EventOwner";
 export * from "./Public/GroupedSignal";
 export * from "./Public/GroupedSignalConnection";
+export * from "./Public/HtmlListener";
 export * from "./Public/IntervalEvent";
 export * from "./Public/Observer";
 export * from "./Public/Signal";

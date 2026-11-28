@@ -7,8 +7,10 @@ import { SignalConnectionPrivate } from "../Private/SignalConnectionPrivate";
 import { IntervalEventPrivate } from "../Private/IntervalEventPrivate";
 import { TimeoutEventPrivate } from "../Private/TimeoutEventPrivate";
 import { GroupedSignalConnectionPrivate } from "../Private/GroupedSignalConnectionPrivate";
+import { HtmlListener } from "./HtmlListener";
+import { HtmlListenerPrivate } from "../Private/HtmlListenerPrivate";
 
-export type EventOwnerResource = SignalConnection<any> | IntervalEvent | TimeoutEvent | GroupedSignalConnection<any, any>;
+export type EventOwnerResource = SignalConnection<any> | IntervalEvent | TimeoutEvent | GroupedSignalConnection<any, any> | HtmlListener<any, any>;
 
 export function getEventOwnerResourcePrivate(v: EventOwnerResource) {
     switch(v.constructor) {
@@ -16,6 +18,7 @@ export function getEventOwnerResourcePrivate(v: EventOwnerResource) {
         case IntervalEvent: return IntervalEventPrivate.get(v);
         case TimeoutEvent: return TimeoutEventPrivate.get(v);
         case GroupedSignalConnection: return GroupedSignalConnectionPrivate.get(v);
+        case HtmlListener: return HtmlListenerPrivate.get(v);
     }
 }
 
